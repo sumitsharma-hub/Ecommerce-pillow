@@ -1,7 +1,7 @@
 import prisma from "../src/prisma";
 
 async function makeAdmin() {
-    const email = "sumit@gmail.com";
+    const email = "sapna@sharma.com";
 
     try {
         const user = await prisma.user.findUnique({ where: { email } });
