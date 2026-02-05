@@ -7,8 +7,8 @@ export function generateShippingSlip(order: any) {
   doc.moveDown();
 
   doc.fontSize(12).text("FROM:");
-  doc.text("Pillow Store Pvt Ltd");
-  doc.text("Delhi, India");
+  doc.text("Natural Plus Ayurveda, Pvt Ltd");
+  doc.text("Mehsana Gujarat, 384002, India");
   doc.moveDown();
 
   doc.text("TO:");

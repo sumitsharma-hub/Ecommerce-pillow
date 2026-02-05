@@ -21,6 +21,7 @@ model User {
   orders    Order[]
   cartItems CartItem[]
   createdAt DateTime   @default(now())
+  reviews   Review[]
 }
 
 model Product {
@@ -38,6 +39,7 @@ model Product {
 
   cartItems  CartItem[]
   orderItems OrderItem[]
+  reviews    Review[]
 }
 
 model ProductImage {
@@ -135,3 +137,18 @@ model AdminAuditLog {
   action    String
   createdAt DateTime @default(now())
 }
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  rating    Int // 1–5
+  comment   String?
+  productId Int
+  userId    Int
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, userId]) // one review per user per product
+}
+

@@ -13,4 +13,5 @@ router.post("/", authOptional_middleware_1.authMiddlewareOptional, rateLimit_mid
 router.post("/payments/create-order", order_controller_2.createRazorpayOrder);
 router.post("/payments/verify", order_controller_2.verifyPayment);
 router.get("/:id/shipping-slip", auth_middleware_1.authMiddleware, order_controller_3.downloadShippingSlip);
+router.get("/my", auth_middleware_1.authMiddleware, order_controller_1.getMyOrders);
 exports.default = router;

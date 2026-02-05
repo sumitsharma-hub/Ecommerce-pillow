@@ -26,3 +26,16 @@ export async function deleteProduct(req: Request, res: Response) {
   await ProductService.deleteProduct(id);
   res.json({ message: "Product deleted successfully" });
 }
+
+// product.controller.ts
+export async function getProductDetails(req: Request, res: Response) {
+  const { productCode } = req.params;
+
+  const product = await ProductService.getProductByCode(productCode);
+
+  if (!product) {
+    return res.status(404).json({ message: "Product not found" });
+  }
+
+  res.json(product);
+}

@@ -14,6 +14,7 @@ const product_routes_1 = __importDefault(require("./modules/product/product.rout
 const cart_routes_1 = __importDefault(require("./modules/cart/cart.routes"));
 const order_routes_1 = __importDefault(require("./modules/order/order.routes"));
 const webhook_routes_1 = __importDefault(require("./modules/webhooks/webhook.routes"));
+const review_routes_1 = __importDefault(require("./modules/review/review.routes"));
 const app = (0, express_1.default)();
 app.use("/api/webhooks", webhook_routes_1.default);
 app.use((0, cors_1.default)());
@@ -28,5 +29,6 @@ app.use("/api/products", product_routes_1.default);
 app.use("/api/cart", cart_routes_1.default);
 app.use("/api/admin", admin_routes_1.default);
 app.use("/api/orders", order_routes_1.default);
+app.use("/api/reviews", review_routes_1.default);
 app.use("/uploads", express_1.default.static(path_1.default.join(__dirname, "../uploads")));
 exports.default = app;

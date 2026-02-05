@@ -39,7 +39,6 @@ async function updateTracking(req, res) {
         if (!order) {
             return res.status(404).json({ message: "Order not found" });
         }
-        console.log('this is order', order);
         id = order.id;
     }
     const tracking = await prisma_1.default.tracking.upsert({
@@ -47,7 +46,6 @@ async function updateTracking(req, res) {
         update: { courierName, trackingNumber, status },
         create: { orderId: id, courierName, trackingNumber, status },
     });
-    console.log('this is tracking', tracking);
     res.json({ message: "Tracking updated", tracking });
 }
 async function updateOrderStatus(req, res) {

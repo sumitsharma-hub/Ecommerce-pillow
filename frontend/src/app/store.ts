@@ -7,22 +7,28 @@ import { productApi } from "../features/product/productApi";
 import { orderApi } from "../features/order/orderApi";
 import { adminApi } from "../features/admin/adminApi";
 import { adminProductApi } from "../features/admin/adminProductApi";
+import {reviewApi} from "../features/review/reviewApi"
+import { authApi } from "../features/auth/authApi";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     cart: cartReducer,
+    [authApi.reducerPath]: authApi.reducer,
     [productApi.reducerPath]: productApi.reducer,
     [orderApi.reducerPath]: orderApi.reducer,
     [adminApi.reducerPath]: adminApi.reducer,
     [adminProductApi.reducerPath]: adminProductApi.reducer,
+    [reviewApi.reducerPath]: reviewApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
+      authApi.middleware,
       productApi.middleware,
       orderApi.middleware,
       adminApi.middleware,
-      adminProductApi.middleware
+      adminProductApi.middleware,
+      reviewApi.middleware
     ),
 });
 

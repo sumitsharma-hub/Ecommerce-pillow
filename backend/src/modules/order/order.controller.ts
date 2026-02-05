@@ -189,3 +189,35 @@ export async function downloadShippingSlip(req: Request, res: Response) {
   doc.pipe(res);
   doc.end();
 }
+
+
+/**
+ * GET MY ORDERS (USER)
+ */
+export async function getMyOrders(req: AuthRequest, res: Response) {
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  const orders = await prisma.order.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+    include: {
+      tracking: true,
+      items: {
+        include: {
+          product: {
+            select: {
+              name: true,
+              images: { take: 1 },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  res.json(orders);
+}

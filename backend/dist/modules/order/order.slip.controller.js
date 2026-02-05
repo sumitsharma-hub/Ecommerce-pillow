@@ -16,7 +16,7 @@ async function getOrderSlip(req, res) {
     if (!order)
         return res.status(404).json({ error: "Order not found" });
     res.json({
-        from: "Pillow Store, Mumbai",
+        from: "Natural Plus Ayurveda , Mehsana Gujrat , 384002 ",
         to: {
             name: order.user?.name,
             phone: order.user?.phone,

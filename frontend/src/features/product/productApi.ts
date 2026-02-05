@@ -7,6 +7,7 @@ export interface Product {
   price: number;
   imageUrl: string;
   category: string;
+  productCode: string;
 }
 
 export const productApi = createApi({
@@ -18,7 +19,10 @@ export const productApi = createApi({
     getProducts: builder.query<Product[], void>({
       query: () => "/products",
     }),
+    getProductByCode: builder.query<any, string>({
+      query: (productCode) => `/products/${productCode}`,
+    }),
   }),
 });
 
-export const { useGetProductsQuery } = productApi;
+export const { useGetProductsQuery,useGetProductByCodeQuery } = productApi;

@@ -9,6 +9,7 @@ import productRoutes from "./modules/product/product.routes";
 import cartRoutes from "./modules/cart/cart.routes";
 import orderRoutes from "./modules/order/order.routes";
 import webhookRoutes from "./modules/webhooks/webhook.routes";
+import reviewRoutes from "./modules/review/review.routes"
 
 
 
@@ -31,6 +32,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/reviews", reviewRoutes);
+
 
 app.use(
   "/uploads",

@@ -2,9 +2,7 @@
 import { Router } from "express";
 import { authMiddleware } from "../auth/auth.middleware";
 import { requireRole } from "../../middlewares/role.middleware";
-import {
-  getDashboardStats,
-} from "./admin.controller";
+import { getDashboardStats, getOrderDetails } from "./admin.controller";
 import {
   createProduct,
   updateProduct,
@@ -26,20 +24,18 @@ router.get("/orders/:id/slip", downloadShippingSlip);
 router.put("/orders/:orderId/tracking", updateTracking);
 
 // product
-router.post(
-  "/products",
-  upload.array("images", 6),
-  createProduct
-);
+router.post("/products", upload.array("images", 6), createProduct);
 
-router.put(
-  "/products/:id",
-  upload.array("images", 6),
-  updateProduct
-);
+router.put("/products/:id", upload.array("images", 6), updateProduct);
 
 router.delete("/products/:id", deleteProduct);
 router.post("/orders/tracking", updateTracking);
 
+router.get(
+  "/orders/:orderId",
+  authMiddleware,
+  requireRole("ADMIN"),
+  getOrderDetails,
+);
 
 export default router;
