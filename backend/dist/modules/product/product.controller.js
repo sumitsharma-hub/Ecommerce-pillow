@@ -37,6 +37,7 @@ exports.listProducts = listProducts;
 exports.createProduct = createProduct;
 exports.updateProduct = updateProduct;
 exports.deleteProduct = deleteProduct;
+exports.getProductDetails = getProductDetails;
 const ProductService = __importStar(require("./product.service"));
 /** PUBLIC */
 async function listProducts(_req, res) {
@@ -59,4 +60,13 @@ async function deleteProduct(req, res) {
     const id = Number(req.params.id);
     await ProductService.deleteProduct(id);
     res.json({ message: "Product deleted successfully" });
+}
+// product.controller.ts
+async function getProductDetails(req, res) {
+    const { productCode } = req.params;
+    const product = await ProductService.getProductByCode(productCode);
+    if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+    }
+    res.json(product);
 }

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { placeOrder } from "./order.controller";
+import { getMyOrders, placeOrder } from "./order.controller";
 import { authMiddlewareOptional } from "../../middlewares/authOptional.middleware";
 import {
   createRazorpayOrder,
@@ -16,5 +16,7 @@ router.post("/", authMiddlewareOptional, writeLimiter, placeOrder);
 router.post("/payments/create-order", createRazorpayOrder);
 router.post("/payments/verify", verifyPayment);
 router.get("/:id/shipping-slip", authMiddleware, downloadShippingSlip);
+router.get("/my", authMiddleware, getMyOrders);
+
 
 export default router;

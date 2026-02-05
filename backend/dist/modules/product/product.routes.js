@@ -13,4 +13,5 @@ router.get("/", product_controller_1.listProducts);
 router.post("/", auth_middleware_1.authMiddleware, (0, role_middleware_1.requireRole)("ADMIN"), (0, validate_1.validate)(product_schema_1.createProductSchema), product_controller_1.createProduct);
 router.put("/:id", auth_middleware_1.authMiddleware, (0, role_middleware_1.requireRole)("ADMIN"), (0, validate_1.validate)(product_schema_1.updateProductSchema), product_controller_1.updateProduct);
 router.delete("/:id", auth_middleware_1.authMiddleware, (0, role_middleware_1.requireRole)("ADMIN"), product_controller_1.deleteProduct);
+router.get("/:productCode", product_controller_1.getProductDetails);
 exports.default = router;

@@ -37,7 +37,6 @@ export async function updateTracking(req: Request, res: Response) {
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
-    console.log('this is order', order);
     id = order.id;
   }
 
@@ -46,7 +45,6 @@ export async function updateTracking(req: Request, res: Response) {
     update: { courierName, trackingNumber, status },
     create: { orderId: id, courierName, trackingNumber, status },
   });
-  console.log('this is tracking', tracking);
 
   res.json({ message: "Tracking updated", tracking });
 }
