@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllOrders = getAllOrders;
 exports.getDashboardStats = getDashboardStats;
+exports.getOrderDetails = getOrderDetails;
 const prisma_1 = __importDefault(require("../../prisma"));
 const admin_dashboard_1 = require("./admin.dashboard");
 // export async function getDashboardStats(_req: Request, res: Response) {
@@ -47,4 +48,38 @@ async function getDashboardStats(req, res) {
         pendingOrders,
         recentActivity,
     });
+}
+async function getOrderDetails(req, res) {
+    const orderId = Number(req.params.orderId);
+    const order = await prisma_1.default.order.findUnique({
+        where: { id: orderId },
+        include: {
+            user: {
+                select: {
+                    name: true,
+                    email: true,
+                    phone: true,
+                },
+            },
+            items: {
+                include: {
+                    product: {
+                        select: {
+                            name: true,
+                            price: true,
+                            images: {
+                                take: 1,
+                                orderBy: { position: "asc" },
+                            },
+                        },
+                    },
+                },
+            },
+            tracking: true,
+        },
+    });
+    if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+    }
+    res.json(order);
 }

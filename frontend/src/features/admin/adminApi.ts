@@ -54,6 +54,9 @@ export const adminApi = createApi({
       },
       invalidatesTags: ["Orders"],
     }),
+        getOrderDetails: builder.query<any, number>({
+      query: (orderId) => `/admin/orders/${orderId}`,
+    }),
   }),
 });
 
@@ -62,4 +65,5 @@ export const {
   useGetOrdersQuery,
   useUpdateTrackingMutation,
   useDownloadSlipMutation,
+  useGetOrderDetailsQuery
 } = adminApi;

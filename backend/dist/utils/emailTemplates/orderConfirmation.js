@@ -19,7 +19,7 @@ function orderConfirmationTemplate(params) {
         </p>
 
         <br/>
-        <p>— Pillow Store Team</p>
+        <p>— Natural Plus Ayurveda, Team</p>
       </div>
     `,
     };

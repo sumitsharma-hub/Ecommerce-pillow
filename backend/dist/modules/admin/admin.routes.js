@@ -22,4 +22,5 @@ router.post("/products", upload_middleware_1.upload.array("images", 6), admin_pr
 router.put("/products/:id", upload_middleware_1.upload.array("images", 6), admin_product_controller_1.updateProduct);
 router.delete("/products/:id", admin_product_controller_1.deleteProduct);
 router.post("/orders/tracking", admin_order_controller_1.updateTracking);
+router.get("/orders/:orderId", auth_middleware_1.authMiddleware, (0, role_middleware_1.requireRole)("ADMIN"), admin_controller_1.getOrderDetails);
 exports.default = router;

@@ -5,7 +5,13 @@ import { generateProductCode } from "../../utils/idGenerator.util";
 export function getAllProducts() {
   return prisma.product.findMany({
     where: { isActive: true },
-    include: {
+    select: {
+      id: true,
+      productCode: true, // ✅ REQUIRED
+      name: true,
+      description: true,
+      price: true,
+      category: true,
       images: {
         orderBy: { position: "asc" },
       },
@@ -78,5 +84,17 @@ export function updateProduct(
 export function deleteProduct(id: number) {
   return prisma.product.delete({
     where: { id },
+  });
+}
+
+
+export function getProductByCode(productCode: string) {
+  return prisma.product.findUnique({
+    where: { productCode },
+    include: {
+      images: {
+        orderBy: { position: "asc" },
+      },
+    },
   });
 }

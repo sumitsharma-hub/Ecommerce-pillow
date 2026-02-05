@@ -55,3 +55,42 @@ export async function getDashboardStats(req: Request, res: Response) {
     recentActivity,
   });
 }
+
+export async function getOrderDetails(req: Request, res: Response) {
+  const orderId = Number(req.params.orderId);
+
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+    include: {
+      user: {
+        select: {
+          name: true,
+          email: true,
+          phone: true,
+        },
+      },
+      items: {
+        include: {
+          product: {
+            select: {
+              name: true,
+              price: true,
+              images: {
+                take: 1,
+                orderBy: { position: "asc" },
+              },
+            },
+          },
+        },
+      },
+      tracking: true,
+    },
+  });
+
+  if (!order) {
+    return res.status(404).json({ message: "Order not found" });
+  }
+
+  res.json(order);
+}
+

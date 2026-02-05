@@ -40,6 +40,7 @@ exports.placeOrder = placeOrder;
 exports.createRazorpayOrder = createRazorpayOrder;
 exports.verifyPayment = verifyPayment;
 exports.downloadShippingSlip = downloadShippingSlip;
+exports.getMyOrders = getMyOrders;
 const OrderService = __importStar(require("./order.service"));
 const prisma_1 = __importDefault(require("../../prisma"));
 const razorpay_1 = require("../../config/razorpay");
@@ -177,4 +178,31 @@ async function downloadShippingSlip(req, res) {
     res.setHeader("Content-Disposition", `attachment; filename=order-${order.id}.pdf`);
     doc.pipe(res);
     doc.end();
+}
+/**
+ * GET MY ORDERS (USER)
+ */
+async function getMyOrders(req, res) {
+    const userId = req.user?.id;
+    if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+    const orders = await prisma_1.default.order.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        include: {
+            tracking: true,
+            items: {
+                include: {
+                    product: {
+                        select: {
+                            name: true,
+                            images: { take: 1 },
+                        },
+                    },
+                },
+            },
+        },
+    });
+    res.json(orders);
 }

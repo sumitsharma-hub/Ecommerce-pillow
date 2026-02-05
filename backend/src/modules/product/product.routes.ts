@@ -4,6 +4,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  getProductDetails,
 } from "./product.controller";
 
 import { authMiddleware } from "../auth/auth.middleware";
@@ -20,6 +21,8 @@ router.get("/", listProducts);
 router.post("/", authMiddleware, requireRole("ADMIN"), validate(createProductSchema), createProduct);
 router.put("/:id", authMiddleware, requireRole("ADMIN"), validate(updateProductSchema), updateProduct);
 router.delete("/:id", authMiddleware, requireRole("ADMIN"), deleteProduct);
+router.get("/:productCode", getProductDetails);
+
 
 export default router;
 

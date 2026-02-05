@@ -7,13 +7,20 @@ exports.getAllProducts = getAllProducts;
 exports.createProduct = createProduct;
 exports.updateProduct = updateProduct;
 exports.deleteProduct = deleteProduct;
+exports.getProductByCode = getProductByCode;
 // Product Service
 const prisma_1 = __importDefault(require("../../prisma"));
 const idGenerator_util_1 = require("../../utils/idGenerator.util");
 function getAllProducts() {
     return prisma_1.default.product.findMany({
         where: { isActive: true },
-        include: {
+        select: {
+            id: true,
+            productCode: true, // ✅ REQUIRED
+            name: true,
+            description: true,
+            price: true,
+            category: true,
             images: {
                 orderBy: { position: "asc" },
             },
@@ -64,5 +71,15 @@ function updateProduct(id, data) {
 function deleteProduct(id) {
     return prisma_1.default.product.delete({
         where: { id },
+    });
+}
+function getProductByCode(productCode) {
+    return prisma_1.default.product.findUnique({
+        where: { productCode },
+        include: {
+            images: {
+                orderBy: { position: "asc" },
+            },
+        },
     });
 }
