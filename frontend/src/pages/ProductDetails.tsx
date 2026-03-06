@@ -85,7 +85,7 @@ export default function ProductDetails() {
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Images + Quick Actions */}
-        <div className="sticky top-24 self-start lg:col-span-1">
+        <div className="top-24 self-start lg:col-span-1">
           <ImageCarousel images={product.images ?? []} variant="details" />
 
           <div className="mt-6 flex gap-2">

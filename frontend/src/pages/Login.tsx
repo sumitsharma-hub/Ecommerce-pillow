@@ -53,7 +53,7 @@ export default function Login() {
           <form onSubmit={handleLogin} className="space-y-6">
             {/* Email */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+              <label className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                 <EmailIcon fontSize="small" className="text-green-600" />
                 Email Address *
               </label>
@@ -69,7 +69,7 @@ export default function Login() {
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+              <label className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                 <LockIcon fontSize="small" className="text-green-600" />
                 Password *
               </label>

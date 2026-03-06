@@ -11,3 +11,16 @@ export const writeLimiter = rateLimit({
   max: 30,
   message: "Too many requests. Please slow down.",
 });
+
+export const forgotPasswordLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+
+  max: 5,
+
+  message: {
+    message: "Too many password reset requests. Try again later.",
+  },
+
+  standardHeaders: true,
+  legacyHeaders: false,
+});

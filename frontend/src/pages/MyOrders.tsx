@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
 import { useGetMyOrdersQuery } from "../features/order/orderApi";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { useState } from "react";
+import { CheckCircleOutline } from "@mui/icons-material";
 
 export default function MyOrders() {
   const { data: orders = [], isLoading } = useGetMyOrdersQuery();
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   if (isLoading) {
     return <div className="flex justify-center py-20">Loading orders...</div>;
@@ -31,9 +35,7 @@ export default function MyOrders() {
           {/* Header */}
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="font-semibold text-gray-800">
-                {order.orderNumber}
-              </p>
+              <p className="font-semibold text-gray-800">{order.orderNumber}</p>
               <p className="text-xs text-gray-500">
                 {new Date(order.createdAt).toLocaleDateString()}
               </p>
@@ -52,10 +54,7 @@ export default function MyOrders() {
           {/* Products */}
           <div className="space-y-3">
             {order.items.map((item: any) => (
-              <div
-                key={item.id}
-                className="flex items-center gap-4 text-sm"
-              >
+              <div key={item.id} className="flex items-center gap-4 text-sm">
                 <img
                   src={`${import.meta.env.VITE_BASE_URL}${item.product.images?.[0]?.url}`}
                   alt={item.product.name}
@@ -66,9 +65,7 @@ export default function MyOrders() {
                   <p className="font-medium text-gray-800">
                     {item.product.name}
                   </p>
-                  <p className="text-gray-500 text-xs">
-                    Qty: {item.quantity}
-                  </p>
+                  <p className="text-gray-500 text-xs">Qty: {item.quantity}</p>
                 </div>
 
                 <p className="font-semibold text-gray-700">
@@ -79,36 +76,68 @@ export default function MyOrders() {
           </div>
 
           {/* Tracking (inline, compact) */}
-          {order.tracking && (
-            <div className="flex flex-wrap items-center gap-3 text-sm bg-gray-50 px-4 py-3 rounded-xl">
-              <span className="font-medium text-gray-700">
-                Courier:
-                <span className="ml-1 text-gray-900">
-                  {order.tracking.courierName}
+          <div className="flex flex-wrap items-center gap-3 text-sm bg-gray-50 px-4 py-3 rounded-xl">
+            {order.tracking ? (
+              <>
+                <span className="font-medium text-gray-700">
+                  Courier:
+                  <span className="ml-1 text-gray-900">
+                    {order.tracking.courierName}
+                  </span>
                 </span>
-              </span>
 
-              <span className="text-gray-500">|</span>
+                <span className="text-gray-500">|</span>
 
-              <span className="text-gray-700">
-                Tracking:
-                <span className="ml-1 font-medium">
-                  {order.tracking.trackingNumber}
+                <span className="text-gray-700 flex items-center gap-2">
+                  Tracking:
+                  <span className="ml-1 font-medium">
+                    {order.tracking.trackingNumber}
+                  </span>
+                  {copiedId === order.tracking.trackingNumber ? (
+                    <span className="p-1" title="copied">
+                      <CheckCircleOutline
+                        className="text-green-500"
+                        fontSize="small"
+                      />
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      className="p-1 rounded hover:bg-green-100 transition"
+                      onClick={async () => {
+                        await navigator.clipboard.writeText(
+                          order.tracking.trackingNumber,
+                        );
+                        setCopiedId(order.tracking.trackingNumber);
+                        setTimeout(() => setCopiedId(null), 2000);
+                      }}
+                      title="Copy"
+                    >
+                      <ContentCopyIcon
+                        fontSize="small"
+                        className="text-gray-500"
+                      />
+                    </button>
+                  )}
                 </span>
+
+                <span className="text-gray-500">|</span>
+
+                <button
+                  onClick={() =>
+                    window.open("https://shreenandancourier.com/", "_blank")
+                  }
+                  className="text-green-700 font-semibold hover:underline"
+                >
+                  Track Order →
+                </button>
+              </>
+            ) : (
+              <span className="text-gray-500">
+                Tracking details will appear here once your order is shipped or out for delivery.
               </span>
-
-              <span className="text-gray-500">|</span>
-
-              <button
-                onClick={() =>
-                  window.open("https://shreenandancourier.com/", "_blank")
-                }
-                className="text-green-700 font-semibold hover:underline"
-              >
-                Track Order →
-              </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       ))}
     </div>

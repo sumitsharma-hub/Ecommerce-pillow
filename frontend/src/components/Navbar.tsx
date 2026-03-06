@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { logout } from "../features/auth/authSlice";
 import { clearCart } from "../features/cart/cartSlice";
 
-import SearchIcon from "@mui/icons-material/Search";
+// import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -52,9 +52,9 @@ export default function Navbar() {
           {/* Right Section */}
           <div className="flex items-center gap-2">
             {/* Search */}
-            <button className="p-2 rounded-xl text-gray-600 hover:text-green-700 hover:bg-green-50">
+            {/* <button className="p-2 rounded-xl text-gray-600 hover:text-green-700 hover:bg-green-50">
               <SearchIcon />
-            </button>
+            </button> */}
 
             {/* Cart */}
             <Link
@@ -94,11 +94,19 @@ export default function Navbar() {
                       onClick={() => setIsProfileOpen(false)}
                     />
                     <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl border border-green-100 shadow-lg z-20">
+                      {/* Show username/email */}
+                      <div className="px-4 py-2  text-xs text-gray-700 font-semibold">
+                        {user.name} <br />
+                        <span className="text-[11px] text-gray-500">
+                          {user.email}
+                        </span>
+                      </div>
                       <Link
                         to="/my-orders"
                         onClick={() => setIsProfileOpen(false)}
-                        className="block px-4 py-2 text-sm hover:bg-green-50"
+                        className="flex gap-2 px-4 py-2 text-sm hover:bg-green-50"
                       >
+                        <img src="img/package.png" alt="" className="w-4.5" />
                         My Orders
                       </Link>
 
@@ -164,9 +172,15 @@ export default function Navbar() {
             </>
           ) : (
             <>
+              <div className="px-4 flex-col items-center justify-center py-2  text-xs text-gray-700 font-semibold">
+                <span>
+                  {user.name} <br />
+                </span>
+                <span className="text-[11px] text-gray-500">{user.email}</span>
+              </div>
               <Link
                 to="/my-orders"
-                className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-green-50"
+                className="w-full flex justify-center items-center gap-3 px-4 py-2 text-sm hover:bg-green-50"
                 onClick={() => setIsProfileOpen(false)}
               >
                 <img src="img/package.png" alt="" className="w-4.5" />
@@ -174,8 +188,9 @@ export default function Navbar() {
               </Link>
               <button
                 onClick={handleLogout}
-                className="w-full py-2 text-center text-red-600 rounded-xl hover:bg-red-50"
+                className="flex items-center justify-center w-full  y-2 gap-2 text-center text-red-600 rounded-xl hover:bg-red-50"
               >
+                <LogoutIcon fontSize="small" />
                 Logout
               </button>
             </>
