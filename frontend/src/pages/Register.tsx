@@ -57,7 +57,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-green-50 via-white to-emerald-50 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-linear-to-br from-green-50 via-white to-emerald-50 flex items-center justify-center px-2 py-8 sm:px-4 sm:py-12">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
@@ -69,11 +69,11 @@ export default function Register() {
         </div>
 
         {/* Form Card */}
-        <div className="bg-white rounded-2xl shadow-sm border border-green-100 p-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-green-100 p-4 sm:p-8">
           <form onSubmit={handleRegister} className="space-y-6">
             {/* Name */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+              <label className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                 <PersonIcon fontSize="small" className="text-green-600" />
                 Full Name *
               </label>
@@ -90,7 +90,7 @@ export default function Register() {
 
             {/* Email */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+              <label className=" text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                 <EmailIcon fontSize="small" className="text-green-600" />
                 Email Address *
               </label>
@@ -106,28 +106,26 @@ export default function Register() {
             </div>
 
             {/* Phone */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                  <PhoneIcon fontSize="small" className="text-green-600" />
-                  Phone *
-                </label>
-                <input
-                  name="phone"
-                  type="tel"
-                  value={form.phone}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-green-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
-                  placeholder="+91 98765 43210"
-                />
-              </div>
+            <div>
+              <label className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                <PhoneIcon fontSize="small" className="text-green-600" />
+                Phone *
+              </label>
+              <input
+                name="phone"
+                type="tel"
+                value={form.phone}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-green-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
+                placeholder="+91 98765 43210"
+              />
             </div>
 
             {/* Password */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row sm:gap-4">
+              <div className="w-full">
+                <label className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                   <LockIcon fontSize="small" className="text-green-600" />
                   Password *
                 </label>
@@ -141,10 +139,10 @@ export default function Register() {
                   placeholder="Create a password"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+              <div className="w-full mt-6 sm:mt-0">
+                <label className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                   <CheckCircleIcon fontSize="small" className="text-green-600" />
-                  Confirm Password *
+                  Confirm Password
                 </label>
                 <input
                   name="confirmPassword"

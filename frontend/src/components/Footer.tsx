@@ -6,7 +6,7 @@ import {
   LocationOn,
   Facebook,
   Instagram,
-  Twitter,
+  // Twitter,
   InfoOutlined,
 } from "@mui/icons-material";
 import GroupsIcon from "@mui/icons-material/Groups";
@@ -24,7 +24,11 @@ export default function Footer() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-2xl">
-                  <img src="/img/logo-natural-plus-white.png" alt="" className="w-[6em]"/>
+                  <img
+                    src="/img/logo-natural-plus-white.png"
+                    alt=""
+                    className="w-[6em]"
+                  />
                 </span>
                 <h3 className="text-xl font-bold text-green-400">
                   Natural Plus
@@ -36,9 +40,21 @@ export default function Footer() {
               </p>
 
               <div className="flex gap-3 mt-6">
-                <SocialIcon icon={<Facebook fontSize="small" />} />
-                <SocialIcon icon={<Instagram fontSize="small" />} />
-                <SocialIcon icon={<Twitter fontSize="small" />} />
+                <Link
+                  to="https://www.facebook.com/share/1CzzQqdZ4u/?mibextid=wwXIfr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <SocialIcon icon={<Facebook fontSize="small" />} />
+                </Link>
+                <Link
+                  to="https://www.instagram.com/naturalplusayurveda?igsh=M2thdHA2aGE4ZmJn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <SocialIcon icon={<Instagram fontSize="small" />} />
+                </Link>
+                {/* <SocialIcon icon={<Twitter fontSize="small" />} />÷ */}
               </div>
             </div>
 
@@ -54,7 +70,7 @@ export default function Footer() {
                     to="/about-us"
                     className="flex items-center gap-2 hover:text-green-400 transition-colors"
                   >
-                    <GroupsIcon fontSize="small" />
+                    <GroupsIcon fontSize="small" className="text-green-400" />
                     About Us
                   </Link>
                 </li>
@@ -63,7 +79,7 @@ export default function Footer() {
                     onClick={() => setOpenHelp(true)}
                     className="flex items-center gap-2 hover:text-green-400 transition-colors"
                   >
-                    <InfoOutlined fontSize="small" />
+                    <InfoOutlined fontSize="small" className="text-green-400" />
                     How to Use Website
                   </button>
                 </li>
