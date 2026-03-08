@@ -1,6 +1,7 @@
 import { orderConfirmationTemplate } from "./emailTemplates/orderConfirmation";
 import { transporter } from "../utils/mailer.util";
 import { passwordResetTemplate } from "./emailTemplates/passwordReset";
+import { loginOtpTemplate } from "./emailTemplates/loginOtp";
 export async function sendOrderConfirmationEmail(
   to: string,
   orderNumber: string,
@@ -37,3 +38,12 @@ export async function sendPasswordResetEmail(email: string, otp: string) {
     html: passwordResetTemplate(otp)
   });
 }
+
+export const sendOtpEmail = async (email: string, otp: string) => {
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM || "no-reply@naturalplus.com",
+    to: email,
+    subject: "Your Login OTP",
+    html: loginOtpTemplate(otp),
+  });
+};

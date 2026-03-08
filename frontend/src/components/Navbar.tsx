@@ -4,12 +4,12 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { logout } from "../features/auth/authSlice";
 import { clearCart } from "../features/cart/cartSlice";
 
-// import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LogoutIcon from "@mui/icons-material/Logout";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 
 export default function Navbar() {
   const { user } = useAppSelector((state) => state.auth);
@@ -51,11 +51,6 @@ export default function Navbar() {
 
           {/* Right Section */}
           <div className="flex items-center gap-2">
-            {/* Search */}
-            {/* <button className="p-2 rounded-xl text-gray-600 hover:text-green-700 hover:bg-green-50">
-              <SearchIcon />
-            </button> */}
-
             {/* Cart */}
             <Link
               to="/cart"
@@ -71,7 +66,6 @@ export default function Navbar() {
 
             {/* ================= DESKTOP ================= */}
             {user ? (
-              /* Desktop user dropdown */
               <div className="relative hidden sm:block">
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -94,13 +88,20 @@ export default function Navbar() {
                       onClick={() => setIsProfileOpen(false)}
                     />
                     <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl border border-green-100 shadow-lg z-20">
-                      {/* Show username/email */}
-                      <div className="px-4 py-2  text-xs text-gray-700 font-semibold">
+                      <div className="px-4 py-2 text-xs text-gray-700 font-semibold">
                         {user.name} <br />
                         <span className="text-[11px] text-gray-500">
                           {user.email}
                         </span>
                       </div>
+                      <Link
+                        to="/profile"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-green-50"
+                      >
+                        <PersonOutlineIcon fontSize="small" />
+                        My Profile
+                      </Link>
                       <Link
                         to="/my-orders"
                         onClick={() => setIsProfileOpen(false)}
@@ -109,7 +110,6 @@ export default function Navbar() {
                         <img src="img/package.png" alt="" className="w-4.5" />
                         My Orders
                       </Link>
-
                       <button
                         onClick={handleLogout}
                         className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
@@ -122,19 +122,12 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-              /* Desktop auth buttons */
               <div className="hidden sm:flex items-center gap-2">
                 <Link
                   to="/login"
-                  className="text-sm font-medium text-gray-700 hover:text-green-700"
+                  className="text-lg font-medium text-gray-700 hover:text-green-700"
                 >
                   Sign In
-                </Link>
-                <Link
-                  to="/register"
-                  className="px-5 py-2 bg-green-700 text-white rounded-xl text-sm font-semibold hover:bg-green-800"
-                >
-                  Sign Up
                 </Link>
               </div>
             )}
@@ -162,33 +155,34 @@ export default function Navbar() {
               >
                 Sign In
               </Link>
-              <Link
-                to="/register"
-                onClick={() => setIsMenuOpen(false)}
-                className="block text-center py-2 bg-green-700 text-white rounded-xl"
-              >
-                Sign Up
-              </Link>
             </>
           ) : (
             <>
-              <div className="px-4 flex-col items-center justify-center py-2  text-xs text-gray-700 font-semibold">
+              <div className="px-4 flex-col items-center justify-center py-2 text-xs text-gray-700 font-semibold">
                 <span>
                   {user.name} <br />
                 </span>
                 <span className="text-[11px] text-gray-500">{user.email}</span>
               </div>
               <Link
+                to="/profile"
+                className="w-full flex justify-center items-center gap-3 px-4 py-2 text-sm hover:bg-green-50"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <PersonOutlineIcon fontSize="small" />
+                My Profile
+              </Link>
+              <Link
                 to="/my-orders"
                 className="w-full flex justify-center items-center gap-3 px-4 py-2 text-sm hover:bg-green-50"
-                onClick={() => setIsProfileOpen(false)}
+                onClick={() => setIsMenuOpen(false)}
               >
                 <img src="img/package.png" alt="" className="w-4.5" />
                 My Orders
               </Link>
               <button
                 onClick={handleLogout}
-                className="flex items-center justify-center w-full  y-2 gap-2 text-center text-red-600 rounded-xl hover:bg-red-50"
+                className="flex items-center justify-center w-full py-2 gap-2 text-center text-red-600 rounded-xl hover:bg-red-50"
               >
                 <LogoutIcon fontSize="small" />
                 Logout

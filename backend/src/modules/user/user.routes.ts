@@ -1,14 +1,10 @@
-// User Routes
 import { Router } from "express";
+import { getProfile, updateProfile } from "./user.controller";
 import { authMiddleware } from "../auth/auth.middleware";
 
 const router = Router();
 
-router.get("/me", authMiddleware, (req, res) => {
-  res.json({
-    message: "Protected route",
-    user: (req as any).user,
-  });
-});
+router.get("/profile", authMiddleware, getProfile);
+router.put("/profile", authMiddleware, updateProfile);
 
 export default router;

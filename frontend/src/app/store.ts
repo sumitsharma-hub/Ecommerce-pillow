@@ -9,6 +9,7 @@ import { adminApi } from "../features/admin/adminApi";
 import { adminProductApi } from "../features/admin/adminProductApi";
 import {reviewApi} from "../features/review/reviewApi"
 import { authApi } from "../features/auth/authApi";
+import { userApi } from "../features/user/userApi";
 
 export const store = configureStore({
   reducer: {
@@ -19,7 +20,8 @@ export const store = configureStore({
     [orderApi.reducerPath]: orderApi.reducer,
     [adminApi.reducerPath]: adminApi.reducer,
     [adminProductApi.reducerPath]: adminProductApi.reducer,
-    [reviewApi.reducerPath]: reviewApi.reducer
+    [reviewApi.reducerPath]: reviewApi.reducer,
+    [userApi.reducerPath]: userApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -28,7 +30,8 @@ export const store = configureStore({
       orderApi.middleware,
       adminApi.middleware,
       adminProductApi.middleware,
-      reviewApi.middleware
+      reviewApi.middleware,
+      userApi.middleware
     ),
 });
 

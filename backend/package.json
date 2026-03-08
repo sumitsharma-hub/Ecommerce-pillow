@@ -6,6 +6,8 @@
   "types": "module",
   "scripts": {
     "dev": "ts-node-dev --respawn src/server.ts",
+    "make-admin": "ts-node scripts/makeAdmin.ts",
+    "remove-admin": "ts-node scripts/removeAdmin.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "prisma": "prisma"
