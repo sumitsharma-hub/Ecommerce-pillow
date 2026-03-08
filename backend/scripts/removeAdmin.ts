@@ -22,12 +22,12 @@ function askQuestion(question: string): Promise<string> {
   });
 }
 
-async function makeAdmin() {
+async function removeAdmin() {
   const email = process.argv[2];
 
   if (!email) {
     console.error("❌ Please provide an email.");
-    console.log("Usage: npm run make-admin user@email.com");
+    console.log("Usage: npm run remove-admin user@email.com");
     process.exit(1);
   }
 
@@ -45,7 +45,7 @@ async function makeAdmin() {
     console.log(`Current role: ${user.role}`);
 
     const answer = await askQuestion(
-      `Are you sure you want to promote ${email} to ADMIN? (y/n): `
+      `Are you sure you want to downgrade ${email} to USER? (y/n): `
     );
 
     if (answer.toLowerCase() !== "y") {
@@ -55,10 +55,10 @@ async function makeAdmin() {
 
     await prisma.user.update({
       where: { email },
-      data: { role: "ADMIN" },
+      data: { role: "USER" },
     });
 
-    console.log(`✅ ${email} promoted to ADMIN`);
+    console.log(`✅ ${email} downgraded to USER`);
   } catch (err: any) {
     console.error("Error:", err?.message ?? err);
     process.exit(1);
@@ -67,4 +67,4 @@ async function makeAdmin() {
   }
 }
 
-makeAdmin();
+removeAdmin();

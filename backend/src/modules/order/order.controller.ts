@@ -36,27 +36,27 @@ export async function placeOrder(req: AuthRequest, res: Response) {
   });
 
   // COD → order is complete immediately
-  if (paymentMethod === "COD") {
-    if (order.userId) {
-      const user = await prisma.user.findUnique({
-        where: { id: order.userId },
-      });
+  // if (paymentMethod === "COD") {
+  //   if (order.userId) {
+  //     const user = await prisma.user.findUnique({
+  //       where: { id: order.userId },
+  //     });
 
-      if (user?.email) {
-        await sendOrderConfirmationEmail(
-          user.email,
-          order.orderNumber,
-          order.totalAmount,
-          user.name
-        );
-      }
-    }
+  //     if (user?.email) {
+  //       await sendOrderConfirmationEmail(
+  //         user.email,
+  //         order.orderNumber,
+  //         order.totalAmount,
+  //         user.name
+  //       );
+  //     }
+  //   }
 
-    return res.json({
-      message: "Order placed successfully (Cash on Delivery)",
-      orderId: order.id,
-    });
-  }
+  //   return res.json({
+  //     message: "Order placed successfully (Cash on Delivery)",
+  //     orderId: order.id,
+  //   });
+  // }
 
   // UPI → frontend will call createRazorpayOrder next
   return res.json({
@@ -152,7 +152,7 @@ export async function verifyPayment(req: Request, res: Response) {
       order.user.email,
       order.orderNumber,
       order.totalAmount,
-      order.user.name
+      order.user.name || "Natural Plus Ayurveda"
     );
   }
 

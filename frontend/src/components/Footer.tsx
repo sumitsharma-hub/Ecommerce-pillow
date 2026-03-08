@@ -11,6 +11,15 @@ import {
 } from "@mui/icons-material";
 import GroupsIcon from "@mui/icons-material/Groups";
 
+const paymentMethods = [
+  { name: "UPI", src: "/img/upi-icon.svg" },
+  { name: "PhonePe", src: "/img/phonepe-1.svg" },
+  { name: "Google Pay", src: "/img/gpay-icon.svg" },
+  { name: "Paytm", src: "/img/paytm-icon.svg" },
+  { name: "Visa", src: "/img/visa-icon.svg" },
+  { name: "Mastercard", src: "/img/mastercard-icon.svg" },
+];
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const [openHelp, setOpenHelp] = useState(false);
@@ -54,11 +63,10 @@ export default function Footer() {
                 >
                   <SocialIcon icon={<Instagram fontSize="small" />} />
                 </Link>
-                {/* <SocialIcon icon={<Twitter fontSize="small" />} />÷ */}
               </div>
             </div>
 
-            {/* Quick Links */}
+            {/* Quick Links + Payments */}
             <nav>
               <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
                 <span className="w-1 h-4 bg-green-500 rounded-full" />
@@ -84,6 +92,31 @@ export default function Footer() {
                   </button>
                 </li>
               </ul>
+
+              {/* Payments Accepted */}
+              <div className="mt-8">
+                <h5 className="text-white font-semibold text-sm mb-3 flex items-center gap-2">
+                  <span className="w-1 h-4 bg-green-500 rounded-full" />
+                  Payments Accepted
+                </h5>
+                <div className="flex flex-wrap gap-2">
+                  {paymentMethods.map((method) => (
+                    <div
+                      key={method.name}
+                      className="h-10 px-3 rounded-lg bg-gray-100 border border-gray-700 flex items-center gap-2"
+                    >
+                      <img
+                        src={method.src}
+                        alt={method.name}
+                        className="h-5 w-auto object-contain"
+                      />
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  Secure checkout powered by Razorpay
+                </p>
+              </div>
             </nav>
 
             {/* Contact */}
@@ -95,7 +128,9 @@ export default function Footer() {
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start gap-3">
                   <Email className="text-green-400" fontSize="small" />
-                  <span className="text-gray-400">support@naturalplus.com</span>
+                  <span className="text-gray-400">
+                    support@naturalplus.com
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <LocalPhone className="text-green-400" fontSize="small" />
@@ -142,9 +177,9 @@ export default function Footer() {
             <ol className="space-y-3 text-sm text-gray-700 list-decimal list-inside">
               <li>Browse Ayurvedic products from the home page</li>
               <li>Click a product to view details & benefits</li>
-              <li>Add products to cart or use “Buy Now”</li>
+              <li>Add products to cart or use "Buy Now"</li>
               <li>Proceed to checkout and place your order</li>
-              <li>Track your order from “My Orders”</li>
+              <li>Track your order from "My Orders"</li>
             </ol>
 
             <button
