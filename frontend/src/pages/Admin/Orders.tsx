@@ -174,39 +174,61 @@ export default function AdminOrders() {
         ) : (
           filteredOrders.map((order: any) => (
             <div key={order.id} className="bg-white rounded-lg border border-gray-200 p-4 hover:bg-gray-50 transition-all">
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                {/* Order Info */}
-                <div className="flex items-start gap-4 flex-1">
-                  <div className="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center shrink-0">
+              
+              {/* Layout wrapper: Mobile defaults to column, Desktop forces row alignment */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+
+                {/* ── Left Side: Order Info & Mobile Download Icon ── */}
+                <div className="flex items-start gap-3 flex-1 min-w-0">
+                  
+                  {/* Icon — hidden on mobile to save horizontal space */}
+                  <div className="w-10 h-10 bg-emerald-50 rounded-lg items-center justify-center shrink-0 hidden sm:flex">
                     <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                     </svg>
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold text-gray-800">{order.orderNumber}</h3>
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.paymentStatus)}`}>
+
+                  {/* Order details */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <h3 className="font-semibold text-gray-800 text-sm sm:text-base break-all">
+                        {order.orderNumber}
+                      </h3>
+                      <span className={`px-2 py-0.5 text-xs font-medium rounded-full shrink-0 ${getStatusColor(order.paymentStatus)}`}>
                         {order.paymentStatus}
                       </span>
                     </div>
-                    <p className="text-xl font-bold text-gray-800">₹{order.totalAmount?.toLocaleString()}</p>
+
+                    <p className="text-xl font-bold text-gray-800">
+                      ₹{order.totalAmount?.toLocaleString()}
+                    </p>
+
+                    {/* Tracking info */}
                     {order.tracking ? (
-                      <p className="text-sm text-gray-600 mt-1">
-                        <span className="font-medium">{order.tracking.courierName}</span> · Tracking: {order.tracking.trackingNumber}
+                      <div className="mt-1 text-sm text-gray-600">
+                        <span className="font-medium">{order.tracking.courierName}</span>
+                        {" · Tracking: "}
+                        <span className="break-all">{order.tracking.trackingNumber}</span>
                         {order.tracking.status && (
-                          <span className={`ml-2 px-2 py-0.5 text-xs font-medium rounded-full ${getStatusColor(order.tracking.status)}`}>
-                            {order.tracking.status}
+                          <span className="block sm:inline mt-1 sm:mt-0 sm:ml-2">
+                            <span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${getStatusColor(order.tracking.status)}`}>
+                              {order.tracking.status}
+                            </span>
                           </span>
                         )}
-                      </p>
+                      </div>
                     ) : (
                       <p className="text-sm text-gray-400 italic mt-1">No tracking info</p>
                     )}
-                    <div className="mt-2 flex items-center gap-3 text-sm">
-                      <Link to={`/admin/orders/${order.id}`} className="text-emerald-600 hover:underline">View Details</Link>
+
+                    {/* View Details + slip downloaded */}
+                    <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
+                      <Link to={`/admin/orders/${order.id}`} className="text-emerald-600 hover:underline">
+                        View Details
+                      </Link>
                       {order.slipDownloadedAt && (
                         <span className="text-gray-500 flex items-center gap-1">
-                          <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                           Slip downloaded {new Date(order.slipDownloadedAt).toLocaleDateString()}
@@ -214,21 +236,39 @@ export default function AdminOrders() {
                       )}
                     </div>
                   </div>
-                </div>
 
-                {/* Actions */}
-                <div className="flex items-center gap-2 self-start md:self-center">
-                  <button onClick={() => downloadSlip(order.id)} className="p-2 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all" title="Download Slip">
+                  {/* Download slip button (Mobile Only) — strictly top-right on mobile screens */}
+                  <button
+                    onClick={() => downloadSlip(order.id)}
+                    className="sm:hidden p-2 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all shrink-0"
+                    title="Download Slip"
+                  >
                     <DownloadIcon fontSize="small" />
                   </button>
+                </div>
+
+                {/* ── Right Side: Action Buttons ── */}
+                <div className="flex items-center gap-2 w-full sm:w-auto shrink-0 mt-1 sm:mt-0">
+                  
+                  {/* Download slip button (Desktop Only) — rendered side-by-side with update button */}
+                  <button
+                    onClick={() => downloadSlip(order.id)}
+                    className="hidden sm:flex p-2 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all shrink-0"
+                    title="Download Slip"
+                  >
+                    <DownloadIcon fontSize="small" />
+                  </button>
+
+                  {/* Update Tracking Button — Full width on mobile, auto width beside the download icon on desktop */}
                   <button
                     onClick={() => handleEditTracking(order)}
-                    className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-all text-sm flex items-center gap-1"
+                    className="w-full sm:w-auto px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-all text-sm flex items-center justify-center gap-1"
                   >
                     <FmdGoodOutlinedIcon fontSize="small" />
                     Update Tracking
                   </button>
                 </div>
+
               </div>
             </div>
           ))

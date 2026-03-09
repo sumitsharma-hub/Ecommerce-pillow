@@ -69,20 +69,25 @@ async function placeOrder(req, res) {
         items,
     });
     // COD → order is complete immediately
-    if (paymentMethod === "COD") {
-        if (order.userId) {
-            const user = await prisma_1.default.user.findUnique({
-                where: { id: order.userId },
-            });
-            if (user?.email) {
-                await (0, email_util_1.sendOrderConfirmationEmail)(user.email, order.orderNumber, order.totalAmount, user.name);
-            }
-        }
-        return res.json({
-            message: "Order placed successfully (Cash on Delivery)",
-            orderId: order.id,
-        });
-    }
+    // if (paymentMethod === "COD") {
+    //   if (order.userId) {
+    //     const user = await prisma.user.findUnique({
+    //       where: { id: order.userId },
+    //     });
+    //     if (user?.email) {
+    //       await sendOrderConfirmationEmail(
+    //         user.email,
+    //         order.orderNumber,
+    //         order.totalAmount,
+    //         user.name
+    //       );
+    //     }
+    //   }
+    //   return res.json({
+    //     message: "Order placed successfully (Cash on Delivery)",
+    //     orderId: order.id,
+    //   });
+    // }
     // UPI → frontend will call createRazorpayOrder next
     return res.json({
         message: "Order created, proceed to payment",
@@ -154,7 +159,7 @@ async function verifyPayment(req, res) {
         },
     });
     if (order.user?.email) {
-        await (0, email_util_1.sendOrderConfirmationEmail)(order.user.email, order.orderNumber, order.totalAmount, order.user.name);
+        await (0, email_util_1.sendOrderConfirmationEmail)(order.user.email, order.orderNumber, order.totalAmount, order.user.name || "Natural Plus Ayurveda");
     }
     res.json({ message: "Payment verified successfully" });
 }

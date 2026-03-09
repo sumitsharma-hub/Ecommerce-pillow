@@ -3,7 +3,6 @@ import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
 import { Sample } from "./pages/Sample";
 import AdminLayout from "./pages/Admin/AdminLayout";
 import Dashboard from "./pages/Admin/Dashboard";
@@ -19,6 +18,9 @@ import AboutUs from "./pages/AboutUs";
 import ForgotPassword from "./pages/ForgotPassword";
 import VerifyResetOtp from "./pages/VerifyResetOtp";
 import ResetPassword from "./pages/ResetPassword";
+import VerifyOtp from "./pages/VerifyOtp";
+import CompleteProfile from "./pages/CompleteProfile";
+import Profile from "./pages/Profile";
 
 function AppContent() {
   const location = useLocation();
@@ -33,14 +35,16 @@ function AppContent() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/products/:productCode" element={<ProductDetails />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
         <Route path="/sample" element={<Sample />} />
         <Route path="/order-success" element={<OrderSuccess />} />
         <Route path="/my-orders" element={<MyOrders />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-reset-otp" element={<VerifyResetOtp />} />
+        <Route path="/verify-otp" element={<VerifyOtp />} />
+        <Route path="/complete-profile" element={<CompleteProfile/>}/>
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="orders" element={<Orders />} />

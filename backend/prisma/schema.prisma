@@ -12,21 +12,23 @@ enum Role {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  name      String
-  email     String     @unique
-  phone     String
-  password  String
-  role      Role       @default(USER)
+  id       Int     @id @default(autoincrement())
+  name     String?
+  email    String? @unique
+  phone    String? @unique
+  password String?
+  role     Role    @default(USER)
+
   orders    Order[]
   cartItems CartItem[]
-  createdAt DateTime   @default(now())
   reviews   Review[]
+
+  createdAt DateTime @default(now())
 }
 
 model Product {
-  id          Int    @id @default(autoincrement()) // internal
-  productCode String @unique // public
+  id          Int    @id @default(autoincrement())
+  productCode String @unique
 
   name        String
   description String?
@@ -68,8 +70,8 @@ model CartItem {
 }
 
 model Order {
-  id          Int    @id @default(autoincrement()) // internal
-  orderNumber String @unique // public
+  id          Int    @id @default(autoincrement())
+  orderNumber String @unique
 
   userId Int?
   user   User? @relation(fields: [userId], references: [id])
@@ -140,7 +142,7 @@ model AdminAuditLog {
 
 model Review {
   id        Int      @id @default(autoincrement())
-  rating    Int // 1–5
+  rating    Int
   comment   String?
   productId Int
   userId    Int
@@ -149,17 +151,30 @@ model Review {
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([productId, userId]) // one review per user per product
+  @@unique([productId, userId])
 }
 
 model PasswordReset {
-  id        Int      @id @default(autoincrement())
-  email     String
-  otp       String
-  attempts  Int      @default(0)
-  expiresAt DateTime
-  used      Boolean  @default(false)
-  createdAt DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  identifier String
+  channel    String // "email" or "sms"
+  otp        String
+  attempts   Int      @default(0)
+  expiresAt  DateTime
+  used       Boolean  @default(false)
+  createdAt  DateTime @default(now())
 
-  @@index([email])
+  @@index([identifier])
+}
+
+model LoginOtp {
+  id         Int      @id @default(autoincrement())
+  identifier String
+  otp        String
+  attempts   Int      @default(0)
+  expiresAt  DateTime
+  used       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([identifier])
 }
