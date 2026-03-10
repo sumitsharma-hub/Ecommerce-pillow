@@ -2,6 +2,7 @@ import { orderConfirmationTemplate } from "./emailTemplates/orderConfirmation";
 import { transporter } from "../utils/mailer.util";
 import { passwordResetTemplate } from "./emailTemplates/passwordReset";
 import { loginOtpTemplate } from "./emailTemplates/loginOtp";
+import { orderTrackingUpdateTemplate } from "./emailTemplates/orderTrackingUpdate";
 export async function sendOrderConfirmationEmail(
   to: string,
   orderNumber: string,
@@ -47,3 +48,32 @@ export const sendOtpEmail = async (email: string, otp: string) => {
     html: loginOtpTemplate(otp),
   });
 };
+
+export async function sendTrackingUpdateEmail(
+  to: string,
+  params: {
+    orderNumber: string;
+    name: string;
+    courierName: string;
+    trackingNumber: string;
+    status: string;
+  }
+) {
+  if (!to) return;
+
+  const { subject, html } = orderTrackingUpdateTemplate(params);
+
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_FROM,
+      to,
+      subject,
+      html,
+    });
+
+    console.log(`📧 Tracking update email sent to ${to} [${params.status}]`);
+  } catch (err: any) {
+    // ❗ Never throw — same pattern as order confirmation
+    console.error("❌ Failed to send tracking update email:", err.message);
+  }
+}

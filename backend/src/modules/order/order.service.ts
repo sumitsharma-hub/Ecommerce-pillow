@@ -1,10 +1,10 @@
-// Order Service
 import prisma from "../../prisma";
 import { generateOrderNumber } from "../../utils/idGenerator.util";
 
 export async function createOrder(data: {
   userId?: number;
   name: string;
+  email: string;   // ++ add
   phone: string;
   address: string;
   paymentMethod: "COD" | "UPI";
@@ -12,16 +12,15 @@ export async function createOrder(data: {
 }) {
   const products = await prisma.product.findMany({
     where: {
-      id: { in: data.items.map(i => i.productId) },
+      id: { in: data.items.map((i) => i.productId) },
     },
   });
 
   let totalAmount = 0;
 
-  const orderItems = data.items.map(item => {
-    const product = products.find(p => p.id === item.productId)!;
+  const orderItems = data.items.map((item) => {
+    const product = products.find((p) => p.id === item.productId)!;
     totalAmount += product.price * item.quantity;
-
     return {
       productId: product.id,
       quantity: item.quantity,
@@ -34,6 +33,7 @@ export async function createOrder(data: {
       orderNumber: generateOrderNumber(),
       userId: data.userId,
       name: data.name,
+      email: data.email,
       phone: data.phone,
       address: data.address,
       paymentMethod: data.paymentMethod,

@@ -256,6 +256,7 @@ export default function Checkout() {
     try {
       await createOrder({
         name: form.name,
+        email:form.email,
         phone: form.phone,
         address: buildAddressString(),
         paymentMethod: "COD",
@@ -277,6 +278,7 @@ export default function Checkout() {
     try {
       const orderRes = await createOrder({
         name: form.name,
+        email:form.email,
         phone: form.phone,
         address: buildAddressString(),
         paymentMethod: "UPI",

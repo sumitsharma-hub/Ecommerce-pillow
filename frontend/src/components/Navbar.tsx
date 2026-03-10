@@ -122,12 +122,19 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
+              // ++ Added Sign Up button alongside Sign In
               <div className="hidden sm:flex items-center gap-2">
                 <Link
                   to="/login"
-                  className="text-lg font-medium text-gray-700 hover:text-green-700"
+                  className="text-sm font-medium text-gray-700 hover:text-green-700 px-3 py-1.5"
                 >
                   Sign In
+                </Link>
+                <Link
+                  to="/register"
+                  className="text-sm font-medium text-white bg-green-700 hover:bg-green-800 px-4 py-1.5 rounded-full transition-colors"
+                >
+                  Sign Up
                 </Link>
               </div>
             )}
@@ -147,13 +154,21 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="sm:hidden bg-white border-t border-green-100 px-4 py-4 space-y-3">
           {!user ? (
+            // ++ Added Sign Up button in mobile menu
             <>
               <Link
                 to="/login"
                 onClick={() => setIsMenuOpen(false)}
-                className="block text-center py-2 border rounded-xl"
+                className="block text-center py-2 border border-green-200 rounded-xl text-gray-700 hover:bg-green-50"
               >
                 Sign In
+              </Link>
+              <Link
+                to="/register"
+                onClick={() => setIsMenuOpen(false)}
+                className="block text-center py-2 bg-green-700 text-white rounded-xl hover:bg-green-800 transition-colors"
+              >
+                Sign Up
               </Link>
             </>
           ) : (

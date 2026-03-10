@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../../prisma";
-
+import { sendTrackingUpdateEmail } from "../../utils/email.util";
 
 export async function getAllOrders(req: Request, res: Response) {
   const orders = await prisma.order.findMany({
@@ -34,9 +34,11 @@ export async function updateTracking(req: Request, res: Response) {
     const order = await prisma.order.findFirst({
       where: { orderNumber: orderId },
     });
+
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
+
     id = order.id;
   }
 
@@ -46,9 +48,31 @@ export async function updateTracking(req: Request, res: Response) {
     create: { orderId: id, courierName, trackingNumber, status },
   });
 
+  // Fetch order to send email
+  const order = await prisma.order.findUnique({
+    where: { id },
+    include: {
+      user: {
+        select: { name: true, email: true },
+      },
+    },
+  });
+
+  const email = order?.email || order?.user?.email;
+  const name = order?.name || order?.user?.name || "Valued Customer";
+
+  if (email) {
+    await sendTrackingUpdateEmail(email, {
+      orderNumber: order?.orderNumber,
+      name,
+      courierName,
+      trackingNumber,
+      status,
+    });
+  }
+
   res.json({ message: "Tracking updated", tracking });
 }
-
 
 export async function updateOrderStatus(req: Request, res: Response) {
   const orderId = Number(req.params.orderId);
@@ -71,6 +95,28 @@ export async function updateOrderTracking(req: Request, res: Response) {
     update: { courierName, trackingNumber, status },
     create: { orderId, courierName, trackingNumber, status },
   });
+
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+    include: {
+      user: {
+        select: { name: true, email: true },
+      },
+    },
+  });
+
+  const email = order?.email || order?.user?.email;
+  const name = order?.name || order?.user?.name || "Valued Customer";
+
+  if (email) {
+    await sendTrackingUpdateEmail(email, {
+      orderNumber: order?.orderNumber,
+      name,
+      courierName,
+      trackingNumber,
+      status,
+    });
+  }
 
   res.json(tracking);
 }
