@@ -43,7 +43,7 @@ const ProductService = __importStar(require("../product/product.service"));
 const prisma_1 = __importDefault(require("../../prisma"));
 const idGenerator_util_1 = require("../../utils/idGenerator.util");
 async function createProduct(req, res) {
-    const { name, price, category, description } = req.body;
+    const { name, price, mrp, category, description, ingredients } = req.body;
     if (!req.files || !(req.files instanceof Array) || req.files.length === 0) {
         return res.status(400).json({ message: "At least one image is required" });
     }
@@ -56,8 +56,10 @@ async function createProduct(req, res) {
             productCode: (0, idGenerator_util_1.generateProductCode)(),
             name,
             price: Number(price),
+            mrp: mrp ? Number(mrp) : undefined,
             category,
             description,
+            ingredients,
             images: {
                 create: imageUrls.map((url, index) => ({
                     url,
@@ -71,20 +73,39 @@ async function createProduct(req, res) {
 }
 async function updateProduct(req, res) {
     const productId = Number(req.params.id);
-    const { name, price, category, description } = req.body;
+    const { name, price, mrp, category, description, ingredients } = req.body;
     let imageOps = {};
+    // Handle existingImageIds — keep specified images, add new uploads
+    const existingImageIds = req.body.existingImageIds;
+    const parsedExistingIds = Array.isArray(existingImageIds)
+        ? existingImageIds.map(Number)
+        : existingImageIds
+            ? [Number(existingImageIds)]
+            : [];
     if (req.files && req.files instanceof Array && req.files.length > 0) {
         const imageUrls = req.files.map((file) => {
             const f = file;
             return `/uploads/products/${f.filename}`;
         });
+        // Get the max position from existing images
+        const existingCount = parsedExistingIds.length;
         imageOps = {
             images: {
-                deleteMany: {},
+                deleteMany: parsedExistingIds.length
+                    ? { id: { notIn: parsedExistingIds } }
+                    : {},
                 create: imageUrls.map((url, index) => ({
                     url,
-                    position: index,
+                    position: existingCount + index,
                 })),
+            },
+        };
+    }
+    else if (parsedExistingIds.length > 0) {
+        // No new files, but existing image IDs specified — delete ones not in the list
+        imageOps = {
+            images: {
+                deleteMany: { id: { notIn: parsedExistingIds } },
             },
         };
     }
@@ -93,8 +114,10 @@ async function updateProduct(req, res) {
         data: {
             name,
             price: Number(price),
+            mrp: mrp ? Number(mrp) : undefined,
             category,
             description,
+            ingredients,
             ...imageOps,
         },
         include: { images: true },

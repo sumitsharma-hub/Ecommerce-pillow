@@ -1,3 +1,4 @@
+// pages/admin/AdminProducts.tsx
 import { useState, useRef } from "react";
 import {
   useGetProductsQuery,
@@ -25,8 +26,10 @@ export default function AdminProducts() {
   const [createForm, setCreateForm] = useState({
     name: "",
     price: "",
+    mrp: "",
     category: "",
     description: "",
+    ingredients: "",
   });
 
   const [createImages, setCreateImages] = useState<File[]>([]);
@@ -36,8 +39,10 @@ export default function AdminProducts() {
   const [editForm, setEditForm] = useState({
     name: "",
     price: "",
+    mrp: "",
     category: "",
     description: "",
+    ingredients: "",
   });
 
   const [existingImages, setExistingImages] = useState<ExistingImage[]>([]);
@@ -64,6 +69,7 @@ export default function AdminProducts() {
       price: Number(createForm.price),
       category: createForm.category,
       description: createForm.description,
+      ingredients: createForm.ingredients,
       images: createImages,
     });
 
@@ -78,8 +84,10 @@ export default function AdminProducts() {
       const formData = new FormData();
       formData.append("name", createForm.name);
       formData.append("price", createForm.price);
+      if (createForm.mrp) formData.append("mrp", createForm.mrp);
       formData.append("category", createForm.category);
       formData.append("description", createForm.description);
+      formData.append("ingredients", createForm.ingredients);
 
       createImages.forEach((file) => {
         formData.append("images", file);
@@ -87,13 +95,22 @@ export default function AdminProducts() {
 
       await createProduct(formData).unwrap();
 
-      setCreateForm({ name: "", price: "", category: "", description: "" });
+      setCreateForm({
+        name: "",
+        price: "",
+        mrp: "",
+        category: "",
+        description: "",
+        ingredients: "",
+      });
       setCreateImages([]);
       setCreateErrors({});
       setIsCreateModalOpen(false);
     } catch (error) {
       console.error("Error creating product:", error);
-      setCreateErrors({ submit: "Failed to create product. Please try again." });
+      setCreateErrors({
+        submit: "Failed to create product. Please try again.",
+      });
     }
   };
 
@@ -104,8 +121,10 @@ export default function AdminProducts() {
     setEditForm({
       name: product.name,
       price: String(product.price),
+      mrp: product.mrp ? String(product.mrp) : "",
       category: product.category,
       description: product.description || "",
+      ingredients: product.ingredients || "",
     });
     setExistingImages(product.images || []);
     setNewEditImages([]);
@@ -120,6 +139,7 @@ export default function AdminProducts() {
       price: Number(editForm.price),
       category: editForm.category,
       description: editForm.description,
+      ingredients: editForm.ingredients,
       images: [...existingImages, ...newEditImages],
     });
 
@@ -134,8 +154,10 @@ export default function AdminProducts() {
       const formData = new FormData();
       formData.append("name", editForm.name);
       formData.append("price", editForm.price);
+      if (editForm.mrp) formData.append("mrp", editForm.mrp);
       formData.append("category", editForm.category);
       formData.append("description", editForm.description);
+      formData.append("ingredients", editForm.ingredients);
 
       existingImages.forEach((img) =>
         formData.append("existingImageIds", String(img.id))
@@ -153,7 +175,9 @@ export default function AdminProducts() {
       setExistingImages([]);
     } catch (error) {
       console.error("Error updating product:", error);
-      setEditErrors({ submit: "Failed to update product. Please try again." });
+      setEditErrors({
+        submit: "Failed to update product. Please try again.",
+      });
     }
   };
 
@@ -170,14 +194,28 @@ export default function AdminProducts() {
 
   const closeCreateModal = () => {
     setIsCreateModalOpen(false);
-    setCreateForm({ name: "", price: "", category: "", description: "" });
+    setCreateForm({
+      name: "",
+      price: "",
+      mrp: "",
+      category: "",
+      description: "",
+      ingredients: "",
+    });
     setCreateImages([]);
     setCreateErrors({});
   };
 
   const closeEditModal = () => {
     setEditingId(null);
-    setEditForm({ name: "", price: "", category: "", description: "" });
+    setEditForm({
+      name: "",
+      price: "",
+      mrp: "",
+      category: "",
+      description: "",
+      ingredients: "",
+    });
     setExistingImages([]);
     setNewEditImages([]);
     setEditErrors({});
@@ -205,15 +243,27 @@ export default function AdminProducts() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Products</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+            Products
+          </h1>
           <p className="text-gray-500 mt-1">Manage your product inventory</p>
         </div>
         <button
           onClick={() => setIsCreateModalOpen(true)}
-          className="px-5 py-2.5 bg-linear-to-r from-green-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-xl shadow-lg  hover:shadow-xl transition-all font-semibold text-sm flex items-center gap-2"
+          className="px-5 py-2.5 bg-linear-to-r from-green-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all font-semibold text-sm flex items-center gap-2"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 4v16m8-8H4"
+            />
           </svg>
           Add Product
         </button>
@@ -228,7 +278,12 @@ export default function AdminProducts() {
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
           </svg>
           <input
             type="text"
@@ -245,8 +300,18 @@ export default function AdminProducts() {
         {filteredProducts.length === 0 ? (
           <div className="col-span-full bg-white rounded-2xl border border-gray-100 shadow-lg p-12 text-center">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+              <svg
+                className="w-8 h-8 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                />
               </svg>
             </div>
             <p className="text-gray-500 font-medium">No products found</p>
@@ -273,13 +338,21 @@ export default function AdminProducts() {
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <svg className="w-16 h-16 text-green-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    <svg
+                      className="w-16 h-16 text-green-200"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
                     </svg>
                   </div>
                 )}
-
-                {/* Image count badge */}
                 <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/50 backdrop-blur-sm rounded-lg text-white text-xs font-medium">
                   {product.images?.length || 0} images
                 </div>
@@ -296,7 +369,16 @@ export default function AdminProducts() {
                       {product.category}
                     </span>
                   </div>
-                  <p className="text-xl font-bold text-gray-800">₹{product.price?.toLocaleString()}</p>
+                  <div className="text-right">
+                    <p className="text-xl font-bold text-gray-800">
+                      ₹{product.price?.toLocaleString()}
+                    </p>
+                    {product.mrp && product.mrp > product.price && (
+                      <p className="text-sm text-gray-400 line-through">
+                        ₹{product.mrp?.toLocaleString()}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 {product.description && (
@@ -311,8 +393,18 @@ export default function AdminProducts() {
                     onClick={() => startEdit(product)}
                     className="flex-1 px-4 py-2.5 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-100 transition-all font-medium text-sm flex items-center justify-center gap-2"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
                     </svg>
                     Edit
                   </button>
@@ -320,8 +412,18 @@ export default function AdminProducts() {
                     onClick={() => setDeleteConfirmId(product.id)}
                     className="px-4 py-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-all font-medium text-sm flex items-center justify-center gap-2"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
                     </svg>
                   </button>
                 </div>
@@ -376,13 +478,26 @@ export default function AdminProducts() {
           />
           <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 text-center">
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              <svg
+                className="w-8 h-8 text-red-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-gray-800 mb-2">Delete Product</h2>
+            <h2 className="text-xl font-bold text-gray-800 mb-2">
+              Delete Product
+            </h2>
             <p className="text-gray-500 mb-6">
-              Are you sure you want to delete this product? This action cannot be undone.
+              Are you sure you want to delete this product? This action cannot
+              be undone.
             </p>
             <div className="flex gap-3">
               <button
@@ -420,15 +535,21 @@ interface ProductFormProps {
   form: {
     name: string;
     price: string;
+    mrp: string;
     category: string;
     description: string;
+    ingredients: string;
   };
-  setForm: React.Dispatch<React.SetStateAction<{
-    name: string;
-    price: string;
-    category: string;
-    description: string;
-  }>>;
+  setForm: React.Dispatch<
+    React.SetStateAction<{
+      name: string;
+      price: string;
+      mrp: string;
+      category: string;
+      description: string;
+      ingredients: string;
+    }>
+  >;
   images: File[];
   setImages: React.Dispatch<React.SetStateAction<File[]>>;
   existingImages?: ExistingImage[];
@@ -516,7 +637,7 @@ function ProductForm({
           </label>
           <input
             type="text"
-            placeholder="e.g., Memory Foam Pillow"
+            placeholder="e.g., Organic Face Cream"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             className={`w-full px-4 py-3 bg-gray-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-400 transition-all ${
@@ -530,11 +651,31 @@ function ProductForm({
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Price (₹) <span className="text-red-500">*</span>
+            Category <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            placeholder="e.g., Skincare, Haircare"
+            value={form.category}
+            onChange={(e) => setForm({ ...form, category: e.target.value })}
+            className={`w-full px-4 py-3 bg-gray-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-400 transition-all ${
+              errors.category ? "border-red-300" : "border-gray-200"
+            }`}
+          />
+          {errors.category && (
+            <p className="mt-1 text-sm text-red-500">{errors.category}</p>
+          )}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Selling Price (₹) <span className="text-red-500">*</span>
           </label>
           <input
             type="number"
-            placeholder="e.g., 1999"
+            placeholder="e.g., 449"
             value={form.price}
             onChange={(e) => setForm({ ...form, price: e.target.value })}
             className={`w-full px-4 py-3 bg-gray-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-400 transition-all ${
@@ -545,24 +686,34 @@ function ProductForm({
             <p className="mt-1 text-sm text-red-500">{errors.price}</p>
           )}
         </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            MRP (₹){" "}
+            <span className="text-gray-400 font-normal">— optional</span>
+          </label>
+          <input
+            type="number"
+            placeholder="e.g., 500 (shown as strikethrough)"
+            value={form.mrp}
+            onChange={(e) => setForm({ ...form, mrp: e.target.value })}
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-400 transition-all"
+          />
+        </div>
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Category <span className="text-red-500">*</span>
+          Ingredients{" "}
+          <span className="text-gray-400 font-normal">— optional</span>
         </label>
-        <input
-          type="text"
-          placeholder="e.g., Bedroom, Living Room"
-          value={form.category}
-          onChange={(e) => setForm({ ...form, category: e.target.value })}
-          className={`w-full px-4 py-3 bg-gray-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-400 transition-all ${
-            errors.category ? "border-red-300" : "border-gray-200"
-          }`}
+        <textarea
+          rows={3}
+          placeholder="e.g., Aloe Vera, Vitamin E, Coconut Oil, Shea Butter..."
+          value={form.ingredients}
+          onChange={(e) => setForm({ ...form, ingredients: e.target.value })}
+          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-400 transition-all resize-none"
         />
-        {errors.category && (
-          <p className="mt-1 text-sm text-red-500">{errors.category}</p>
-        )}
       </div>
 
       <div>
@@ -584,7 +735,6 @@ function ProductForm({
           Product Images <span className="text-red-500">*</span>
         </label>
 
-        {/* Existing Images */}
         {existingImages.length > 0 && (
           <div className="mb-4">
             <p className="text-xs text-gray-500 mb-2">Current Images</p>
@@ -624,11 +774,12 @@ function ProductForm({
           </div>
         )}
 
-        {/* New Images Preview */}
         {images.length > 0 && (
           <div className="mb-4">
             <p className="text-xs text-gray-500 mb-2">
-              {existingImages.length > 0 ? "New Images to Upload" : "Selected Images"}
+              {existingImages.length > 0
+                ? "New Images to Upload"
+                : "Selected Images"}
             </p>
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
               {images.map((file, index) => (
@@ -717,9 +868,13 @@ function ProductForm({
             </div>
             <div>
               <p className="font-medium text-gray-700">
-                {isDragging ? "Drop images here" : "Click to upload or drag and drop"}
+                {isDragging
+                  ? "Drop images here"
+                  : "Click to upload or drag and drop"}
               </p>
-              <p className="text-sm text-gray-500 mt-1">PNG, JPG, GIF up to 10MB each</p>
+              <p className="text-sm text-gray-500 mt-1">
+                PNG, JPG, GIF up to 10MB each
+              </p>
             </div>
           </div>
         </div>
@@ -775,11 +930,12 @@ function Modal({ title, onClose, children }: ModalProps) {
         onClick={onClose}
       />
       <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
-        {/* Header */}
         <div className="flex-shrink-0 border-b border-gray-100 px-8 py-6 flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold text-gray-800">{title}</h2>
-            <p className="text-sm text-gray-500">Fill in the details below</p>
+            <p className="text-sm text-gray-500">
+              Fill in the details below
+            </p>
           </div>
           <button
             onClick={onClose}
@@ -800,8 +956,6 @@ function Modal({ title, onClose, children }: ModalProps) {
             </svg>
           </button>
         </div>
-
-        {/* Content */}
         <div className="flex-1 overflow-y-auto px-8 py-6">{children}</div>
       </div>
     </div>

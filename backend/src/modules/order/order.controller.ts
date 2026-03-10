@@ -152,7 +152,7 @@ export async function verifyPayment(req: Request, res: Response) {
       order.user.email,
       order.orderNumber,
       order.totalAmount,
-      order.user.name || "Natural Plus Ayurveda"
+      order.user.name || "Natural Plus Ayurveda",
     );
   }
 
@@ -169,27 +169,54 @@ export async function downloadShippingSlip(req: Request, res: Response) {
     return res.status(400).json({ message: "Invalid order id" });
   }
 
+  // Fetch order with items
   const order = await prisma.order.findUnique({
     where: { id: orderId },
-    include: { tracking: true },
+    include: {
+      tracking: true,
+      items: {
+        include: {
+          product: {
+            select: { name: true },
+          },
+        },
+      },
+    },
   });
 
   if (!order) {
     return res.status(404).json({ message: "Order not found" });
   }
 
-  const doc = generateShippingSlip(order);
+  const itemName =
+    order.items && order.items.length > 0
+      ? order.items
+          .map((item) => item.product?.name)
+          .filter(Boolean)
+          .join(", ")
+      : "—";
+
+  // Use paymentMethod as paymentMode
+  const paymentMode = order.paymentMethod || "N/A";
+
+  const doc = generateShippingSlip({
+    id: order.orderNumber,
+    name: order.name,
+    phone: order.phone || "",
+    address: order.address,
+    itemName,
+    paymentMode,
+  });
 
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader(
     "Content-Disposition",
-    `attachment; filename=order-${order.id}.pdf`
+    `attachment; filename=order-${order.id}.pdf`,
   );
 
   doc.pipe(res);
   doc.end();
 }
-
 
 /**
  * GET MY ORDERS (USER)

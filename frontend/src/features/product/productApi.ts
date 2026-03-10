@@ -1,13 +1,23 @@
-// Product API
+// features/product/productApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
+export interface ProductImage {
+  id: number;
+  url: string;
+  position: number;
+}
 
 export interface Product {
   id: number;
   name: string;
+  description?: string;
+  ingredients?: string;
   price: number;
+  mrp?: number;
   imageUrl: string;
   category: string;
   productCode: string;
+  images?: ProductImage[];
 }
 
 export const productApi = createApi({
@@ -25,4 +35,4 @@ export const productApi = createApi({
   }),
 });
 
-export const { useGetProductsQuery,useGetProductByCodeQuery } = productApi;
+export const { useGetProductsQuery, useGetProductByCodeQuery } = productApi;

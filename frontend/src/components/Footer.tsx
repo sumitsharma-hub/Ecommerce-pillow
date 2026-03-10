@@ -6,10 +6,13 @@ import {
   LocationOn,
   Facebook,
   Instagram,
-  // Twitter,
   InfoOutlined,
 } from "@mui/icons-material";
 import GroupsIcon from "@mui/icons-material/Groups";
+import GavelOutlinedIcon from "@mui/icons-material/GavelOutlined";
+import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined";
+import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
+import AssignmentReturnOutlinedIcon from "@mui/icons-material/AssignmentReturnOutlined";
 
 const paymentMethods = [
   { name: "UPI", src: "/img/upi-icon.svg" },
@@ -28,7 +31,7 @@ export default function Footer() {
     <>
       <footer className="bg-linear-to-b from-gray-900 to-gray-950 text-gray-300">
         <div className="max-w-7xl mx-auto px-4 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
             {/* Brand */}
             <div>
               <div className="flex items-center gap-2 mb-4">
@@ -66,7 +69,7 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Quick Links + Payments */}
+            {/* Quick Links */}
             <nav>
               <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
                 <span className="w-1 h-4 bg-green-500 rounded-full" />
@@ -85,38 +88,71 @@ export default function Footer() {
                 <li>
                   <button
                     onClick={() => setOpenHelp(true)}
-                    className="flex items-center gap-2 hover:text-green-400 transition-colors"
+                    className="flex items-center gap-2 hover:text-green-400 transition-colors cursor-pointer"
                   >
                     <InfoOutlined fontSize="small" className="text-green-400" />
                     How to Use Website
                   </button>
                 </li>
               </ul>
+            </nav>
 
-              {/* Payments Accepted */}
-              <div className="mt-8">
-                <h5 className="text-white font-semibold text-sm mb-3 flex items-center gap-2">
-                  <span className="w-1 h-4 bg-green-500 rounded-full" />
-                  Payments Accepted
-                </h5>
-                <div className="flex flex-wrap gap-2">
-                  {paymentMethods.map((method) => (
-                    <div
-                      key={method.name}
-                      className="h-10 px-3 rounded-lg bg-gray-100 border border-gray-700 flex items-center gap-2"
-                    >
-                      <img
-                        src={method.src}
-                        alt={method.name}
-                        className="h-5 w-auto object-contain"
-                      />
-                    </div>
-                  ))}
-                </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  Secure checkout powered by Razorpay
-                </p>
-              </div>
+            {/* Policies */}
+            <nav>
+              <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
+                <span className="w-1 h-4 bg-green-500 rounded-full" />
+                Policies
+              </h4>
+              <ul className="space-y-3 text-sm">
+                <li>
+                  <Link
+                    to="/terms-and-conditions"
+                    className="flex items-center gap-2 hover:text-green-400 transition-colors"
+                  >
+                    <GavelOutlinedIcon
+                      fontSize="small"
+                      className="text-green-400"
+                    />
+                    Terms & Conditions
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/privacy-policy"
+                    className="flex items-center gap-2 hover:text-green-400 transition-colors"
+                  >
+                    <ShieldOutlinedIcon
+                      fontSize="small"
+                      className="text-green-400"
+                    />
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/shipping-policy"
+                    className="flex items-center gap-2 hover:text-green-400 transition-colors"
+                  >
+                    <LocalShippingOutlinedIcon
+                      fontSize="small"
+                      className="text-green-400"
+                    />
+                    Shipping Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/return-refund-policy"
+                    className="flex items-center gap-2 hover:text-green-400 transition-colors"
+                  >
+                    <AssignmentReturnOutlinedIcon
+                      fontSize="small"
+                      className="text-green-400"
+                    />
+                    Return & Refund Policy
+                  </Link>
+                </li>
+              </ul>
             </nav>
 
             {/* Contact */}
@@ -148,6 +184,31 @@ export default function Footer() {
                   </address>
                 </li>
               </ul>
+
+              {/* Payments Accepted */}
+              <div className="mt-6">
+                <h5 className="text-white font-semibold text-sm mb-3 flex items-center gap-2">
+                  <span className="w-1 h-4 bg-green-500 rounded-full" />
+                  Payments Accepted
+                </h5>
+                <div className="flex flex-wrap gap-2">
+                  {paymentMethods.map((method) => (
+                    <div
+                      key={method.name}
+                      className="h-10 px-3 rounded-lg bg-gray-100 border border-gray-700 flex items-center gap-2"
+                    >
+                      <img
+                        src={method.src}
+                        alt={method.name}
+                        className="h-5 w-auto object-contain"
+                      />
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  Secure checkout powered by Razorpay
+                </p>
+              </div>
             </div>
           </div>
 
@@ -184,7 +245,7 @@ export default function Footer() {
 
             <button
               onClick={() => setOpenHelp(false)}
-              className="mt-6 w-full bg-green-700 hover:bg-green-800 text-white py-2.5 rounded-xl font-semibold"
+              className="mt-6 w-full bg-green-700 hover:bg-green-800 text-white py-2.5 rounded-xl font-semibold cursor-pointer"
             >
               Got it
             </button>
@@ -198,7 +259,7 @@ export default function Footer() {
 /* Reusable social icon */
 function SocialIcon({ icon }: { icon: React.ReactNode }) {
   return (
-    <button className="p-2 bg-gray-800 hover:bg-green-700 rounded-lg transition-colors">
+    <button className="p-2 bg-gray-800 hover:bg-green-700 rounded-lg transition-colors cursor-pointer">
       {icon}
     </button>
   );

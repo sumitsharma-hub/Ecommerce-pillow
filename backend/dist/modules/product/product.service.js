@@ -8,7 +8,7 @@ exports.createProduct = createProduct;
 exports.updateProduct = updateProduct;
 exports.deleteProduct = deleteProduct;
 exports.getProductByCode = getProductByCode;
-// Product Service
+// product.service.ts
 const prisma_1 = __importDefault(require("../../prisma"));
 const idGenerator_util_1 = require("../../utils/idGenerator.util");
 function getAllProducts() {
@@ -16,10 +16,12 @@ function getAllProducts() {
         where: { isActive: true },
         select: {
             id: true,
-            productCode: true, // ✅ REQUIRED
+            productCode: true,
             name: true,
             description: true,
+            ingredients: true,
             price: true,
+            mrp: true,
             category: true,
             images: {
                 orderBy: { position: "asc" },
@@ -33,7 +35,9 @@ function createProduct(data) {
             productCode: (0, idGenerator_util_1.generateProductCode)(),
             name: data.name,
             description: data.description,
+            ingredients: data.ingredients,
             price: data.price,
+            mrp: data.mrp,
             category: data.category,
             images: {
                 create: data.images.map((url, index) => ({
@@ -55,7 +59,7 @@ function updateProduct(id, data) {
             ...productData,
             images: images
                 ? {
-                    deleteMany: {}, // remove old images
+                    deleteMany: {},
                     create: images.map((url, index) => ({
                         url,
                         position: index,

@@ -1,4 +1,4 @@
-// Product Service
+// product.service.ts
 import prisma from "../../prisma";
 import { generateProductCode } from "../../utils/idGenerator.util";
 
@@ -7,10 +7,12 @@ export function getAllProducts() {
     where: { isActive: true },
     select: {
       id: true,
-      productCode: true, // ✅ REQUIRED
+      productCode: true,
       name: true,
       description: true,
+      ingredients: true,
       price: true,
+      mrp: true,
       category: true,
       images: {
         orderBy: { position: "asc" },
@@ -19,11 +21,12 @@ export function getAllProducts() {
   });
 }
 
-
 export function createProduct(data: {
   name: string;
   description?: string;
+  ingredients?: string;
   price: number;
+  mrp?: number;
   category: string;
   images: string[];
 }) {
@@ -32,7 +35,9 @@ export function createProduct(data: {
       productCode: generateProductCode(),
       name: data.name,
       description: data.description,
+      ingredients: data.ingredients,
       price: data.price,
+      mrp: data.mrp,
       category: data.category,
       images: {
         create: data.images.map((url, index) => ({
@@ -47,13 +52,14 @@ export function createProduct(data: {
   });
 }
 
-
 export function updateProduct(
   id: number,
   data: {
     name?: string;
     description?: string;
+    ingredients?: string;
     price?: number;
+    mrp?: number;
     category?: string;
     images?: string[];
   }
@@ -66,7 +72,7 @@ export function updateProduct(
       ...productData,
       images: images
         ? {
-            deleteMany: {}, // remove old images
+            deleteMany: {},
             create: images.map((url, index) => ({
               url,
               position: index,
@@ -80,13 +86,11 @@ export function updateProduct(
   });
 }
 
-
 export function deleteProduct(id: number) {
   return prisma.product.delete({
     where: { id },
   });
 }
-
 
 export function getProductByCode(productCode: string) {
   return prisma.product.findUnique({
