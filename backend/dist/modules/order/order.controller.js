@@ -171,14 +171,39 @@ async function downloadShippingSlip(req, res) {
     if (!orderId) {
         return res.status(400).json({ message: "Invalid order id" });
     }
+    // Fetch order with items
     const order = await prisma_1.default.order.findUnique({
         where: { id: orderId },
-        include: { tracking: true },
+        include: {
+            tracking: true,
+            items: {
+                include: {
+                    product: {
+                        select: { name: true },
+                    },
+                },
+            },
+        },
     });
     if (!order) {
         return res.status(404).json({ message: "Order not found" });
     }
-    const doc = (0, shippingSlip_util_1.generateShippingSlip)(order);
+    const itemName = order.items && order.items.length > 0
+        ? order.items
+            .map((item) => item.product?.name)
+            .filter(Boolean)
+            .join(", ")
+        : "—";
+    // Use paymentMethod as paymentMode
+    const paymentMode = order.paymentMethod || "N/A";
+    const doc = (0, shippingSlip_util_1.generateShippingSlip)({
+        id: order.orderNumber,
+        name: order.name,
+        phone: order.phone || "",
+        address: order.address,
+        itemName,
+        paymentMode,
+    });
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", `attachment; filename=order-${order.id}.pdf`);
     doc.pipe(res);

@@ -9,7 +9,7 @@ const API_KEY = process.env.TWO_FACTOR_API_KEY;
 
 export async function sendSmsOtp(phone: string): Promise<string> {
   const formattedPhone = `91${phone}`;
-  const url = `https://2factor.in/API/V1/${API_KEY}/SMS/${formattedPhone}/AUTOGEN`;
+  const url = `https://2factor.in/API/V1/${API_KEY}/SMS/${formattedPhone}/AUTOGEN3/naturalplus_1`;
 
   const response = await axios.get(url);
 
@@ -24,7 +24,7 @@ export async function verifySmsOtp(
   sessionId: string,
   otp: string
 ): Promise<boolean> {
-  const url = `https://2factor.in/API/V1/${API_KEY}/SMS/VERIFY/${sessionId}/${otp}`;
+  const url = `https://2factor.in/API/V1/${API_KEY}/SMS/VERIFY3/${sessionId}/${otp}`;
 
   const response = await axios.get(url);
 

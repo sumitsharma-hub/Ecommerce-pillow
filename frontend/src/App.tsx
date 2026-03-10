@@ -21,6 +21,10 @@ import ResetPassword from "./pages/ResetPassword";
 import VerifyOtp from "./pages/VerifyOtp";
 import CompleteProfile from "./pages/CompleteProfile";
 import Profile from "./pages/Profile";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import ShippingPolicy from "./pages/ShippingPolicy";
+import ReturnRefundPolicy from "./pages/ReturnRefundPolicy";
 
 function AppContent() {
   const location = useLocation();
@@ -42,9 +46,13 @@ function AppContent() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-reset-otp" element={<VerifyResetOtp />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
-        <Route path="/complete-profile" element={<CompleteProfile/>}/>
+        <Route path="/complete-profile" element={<CompleteProfile />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/shipping-policy" element={<ShippingPolicy />} />
+        <Route path="/return-refund-policy" element={<ReturnRefundPolicy />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="orders" element={<Orders />} />

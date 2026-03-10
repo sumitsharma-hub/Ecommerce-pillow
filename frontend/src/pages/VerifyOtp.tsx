@@ -14,7 +14,7 @@ export default function VerifyOtp() {
 
   const identifier: string = state?.identifier || "";
   const identifierType: "email" | "phone" = state?.identifierType || "phone";
-  const isNewUser: boolean = state?.isNewUser || false;
+//   const isNewUser: boolean = state?.isNewUser || false;
   const otpSentVia: "sms" | "email" = state?.otpSentVia || "sms";
 
   const [sessionId, setSessionId] = useState<string | null>(

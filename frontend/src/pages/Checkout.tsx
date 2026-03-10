@@ -576,154 +576,215 @@ export default function Checkout() {
             </div>
 
             {/* Payment */}
-            <div className="bg-white rounded-2xl shadow-sm border border-green-100 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-green-100 p-4 sm:p-6">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6 flex items-center gap-2">
+                <svg
+                  className="w-5 h-5 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                  />
+                </svg>
                 Payment Method
               </h2>
+
               <label
-                className={`flex items-start gap-4 p-5 border-2 rounded-2xl cursor-pointer transition-all w-full ${
+                className={`group flex flex-col sm:flex-row items-start gap-3 sm:gap-4 p-4 sm:p-5 border-2 rounded-2xl cursor-pointer transition-all duration-200 w-full ${
                   paymentMethod === "ONLINE"
-                    ? "border-green-500 bg-green-50 shadow-md"
-                    : "border-green-200 hover:border-green-300 hover:shadow-sm"
+                    ? "border-green-500 bg-gradient-to-br from-green-50 to-emerald-50 shadow-md ring-1 ring-green-200"
+                    : "border-gray-200 hover:border-green-300 hover:shadow-sm hover:bg-green-50/30"
                 }`}
               >
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="ONLINE"
-                  checked={paymentMethod === "ONLINE"}
-                  onChange={() => setPaymentMethod("ONLINE")}
-                  className="mt-1 w-5 h-5 text-green-600 focus:ring-green-500"
-                />
+                {/* Radio + Label Row */}
+                <div className="flex items-start gap-3 sm:gap-4 w-full sm:w-auto">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="ONLINE"
+                    checked={paymentMethod === "ONLINE"}
+                    onChange={() => setPaymentMethod("ONLINE")}
+                    className="mt-1 w-5 h-5 text-green-600 focus:ring-green-500 shrink-0"
+                  />
 
-                <div className="flex-1">
-                  <div className="flex items-center justify-between flex-wrap gap-3">
-                    <span className="font-semibold text-gray-900 text-lg">
+                  {/* Razorpay badge — visible on mobile next to radio */}
+                  <div className="flex-1 sm:hidden">
+                    <span className="font-semibold text-gray-900 text-base">
                       Razorpay Secure
                     </span>
+                  </div>
+                </div>
 
-                    {/* Payment Icons */}
-                    <div className="flex items-center gap-2">
-                      <img
-                        src="/img/upi-icon.svg"
-                        alt="UPI"
-                        className="h-5"
-                      />
-                      <img
-                        src="/img/gpay-icon.svg"
-                        alt="GPay"
-                        className="h-4"
-                      />
-                      <img
-                        src="/img/paytm-icon.svg"
-                        alt="paytm"
-                        className="h-4"
-                      />
-                      <img
-                        src="/img/phonepe-1.svg"
-                        alt="PhonePe"
-                        className="h-5"
-                      />
-                      <img
-                        src="/img/visa-icon.svg"
-                        alt="Visa"
-                        className="h-4"
-                      />
-                      <img
-                        src="/img/mastercard-icon.svg"
-                        alt="Mastercard"
-                        className="h-5"
-                      />
-                    </div>
+                {/* Content */}
+                <div className="flex-1 w-full">
+                  {/* Title — hidden on mobile (shown next to radio above) */}
+                  <span className="hidden sm:block font-semibold text-gray-900 text-lg mb-1">
+                    Razorpay Secure
+                  </span>
+
+                  {/* Payment Icons Grid */}
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3">
+                    {[
+                      { src: "/img/upi-icon.svg", alt: "UPI", h: "h-6 sm:h-5" },
+                      {
+                        src: "/img/gpay-icon.svg",
+                        alt: "GPay",
+                        h: "h-5 sm:h-4",
+                      },
+                      {
+                        src: "/img/paytm-icon.svg",
+                        alt: "Paytm",
+                        h: "h-5 sm:h-4",
+                      },
+                      {
+                        src: "/img/phonepe-1.svg",
+                        alt: "PhonePe",
+                        h: "h-6 sm:h-5",
+                      },
+                      {
+                        src: "/img/visa-icon.svg",
+                        alt: "Visa",
+                        h: "h-5 sm:h-4",
+                      },
+                      {
+                        src: "/img/mastercard-icon.svg",
+                        alt: "Mastercard",
+                        h: "h-6 sm:h-5",
+                      },
+                    ].map((icon) => (
+                      <div
+                        key={icon.alt}
+                        className="flex items-center justify-center bg-white border border-gray-200 rounded-lg px-2 py-1.5 shadow-sm"
+                      >
+                        <img
+                          src={icon.src}
+                          alt={icon.alt}
+                          className={`${icon.h} object-contain max-w-[48px]`}
+                        />
+                      </div>
+                    ))}
                   </div>
 
-                  <p className="text-sm text-gray-600 mt-2">
+                  {/* Description */}
+                  <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
                     Pay securely via UPI, Credit/Debit Cards, Netbanking &
                     Wallets. You will be redirected to Razorpay to complete
                     payment.
                   </p>
+
+                  {/* Security badge */}
+                  <div className="flex items-center gap-1.5 mt-3">
+                    <svg
+                      className="w-3.5 h-3.5 text-green-500"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-xs text-green-700 font-medium">
+                      256-bit SSL Encrypted &amp; Secure
+                    </span>
+                  </div>
                 </div>
               </label>
             </div>
           </div>
 
-          {/* ── Right Column: Order Summary ─────────────────────────────── */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-sm border border-green-100 p-6 sticky top-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">
-                Order Summary
-              </h2>
+{/* ── Right Column: Order Summary ─────────────────────────────── */}
+<div className="lg:col-span-1">
+  <aside className="bg-white/95 backdrop-blur rounded-2xl shadow-sm border border-emerald-100 p-4 sm:p-6 lg:sticky lg:top-6">
+    <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">
+      Order Summary
+    </h2>
 
-              <div className="space-y-3 max-h-60 overflow-y-auto mb-6">
-                {items.map((item: any) => (
-                  <div
-                    key={item.id}
-                    className="flex justify-between text-sm py-2"
-                  >
-                    <span className="text-gray-700 truncate">
-                      {item.name} × {item.quantity}
-                    </span>
-                    <span className="font-semibold text-gray-900">
-                      ₹{(item.price * item.quantity).toLocaleString()}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="space-y-3 text-sm">
-                <div className="flex justify-between font-semibold">
-                  <span className="text-gray-700">Subtotal</span>
-                  <span className="text-gray-900">
-                    ₹{totalAmount.toLocaleString()}
-                  </span>
-                </div>
-                <div className="flex justify-between text-green-700 font-semibold">
-                  <span>Shipping</span>
-                  <span>Free</span>
-                </div>
-              </div>
-
-              <div className="border-t border-green-200 mt-6 pt-6">
-                <div className="flex justify-between text-2xl font-bold">
-                  <span>Total</span>
-                  <span className="text-green-700">
-                    ₹{totalAmount.toLocaleString()}
-                  </span>
-                </div>
-              </div>
-
-              <button
-                onClick={handlePlaceOrder}
-                disabled={loading}
-                className="mt-8 w-full bg-green-700 hover:bg-green-800 disabled:bg-green-400 disabled:cursor-not-allowed text-white font-bold py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-lg"
-              >
-                {loading ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    {paymentMethod === "COD"
-                      ? "Place Order (COD)"
-                      : "Pay Now Securely"}
-                    <ArrowForwardIcon fontSize="small" />
-                  </>
-                )}
-              </button>
-
-              <p className="text-xs text-gray-500 text-center mt-4 leading-relaxed">
-                By placing your order, you agree to our{" "}
-                <Link
-                  to="#"
-                  className="text-green-700 hover:underline font-medium"
-                >
-                  Terms & Conditions
-                </Link>
-                .
-              </p>
-            </div>
+    {/* Items */}
+    <div className="space-y-2 sm:space-y-3 max-h-56 sm:max-h-64 overflow-y-auto pr-1 mb-5 sm:mb-6">
+      {items?.length ? (
+        items.map((item: any) => (
+          <div key={item.id} className="flex items-start justify-between gap-3 py-2">
+            <span className="text-sm text-gray-700 min-w-0 flex-1 truncate">
+              {item.name} × {item.quantity}
+            </span>
+            <span className="text-sm font-semibold text-gray-900 shrink-0">
+              ₹{(item.price * item.quantity).toLocaleString("en-IN")}
+            </span>
           </div>
+        ))
+      ) : (
+        <p className="text-sm text-gray-500 py-2">Your cart is empty.</p>
+      )}
+    </div>
+
+    {/* Price Breakdown */}
+    <div className="space-y-3 text-sm">
+      <div className="flex items-center justify-between font-semibold">
+        <span className="text-gray-700">Subtotal</span>
+        <span className="text-gray-900">₹{totalAmount.toLocaleString("en-IN")}</span>
+      </div>
+
+      {/* Shipping is NOT free */}
+      <div className="flex items-start justify-between gap-3">
+        <span className="text-gray-700 font-medium">Shipping</span>
+        <span className="text-right text-gray-700 font-medium leading-tight">
+          As applicable
+          <span className="block text-xs text-gray-500 font-normal mt-1">
+            - Inclusive of all taxes
+          </span>
+        </span>
+      </div>
+    </div>
+
+    {/* Total */}
+    <div className="border-t border-emerald-200 mt-5 sm:mt-6 pt-5 sm:pt-6">
+      <div className="flex items-center justify-between">
+        <span className="text-xl sm:text-2xl font-bold text-gray-900">Total</span>
+        <span className="text-xl sm:text-2xl font-extrabold text-emerald-700">
+          ₹{totalAmount.toLocaleString("en-IN")}
+        </span>
+      </div>
+    </div>
+
+    {/* CTA */}
+    <button
+      onClick={handlePlaceOrder}
+      disabled={loading}
+      aria-busy={loading}
+      className="mt-6 sm:mt-8 w-full bg-emerald-700 hover:bg-emerald-800 active:scale-[0.99] disabled:bg-emerald-400 disabled:cursor-not-allowed text-white font-bold py-3.5 sm:py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-base sm:text-lg"
+    >
+      {loading ? (
+        <>
+          <div className="w-5 h-5 border-2 border-white/90 border-t-transparent rounded-full animate-spin" />
+          Processing...
+        </>
+      ) : (
+        <>
+          {paymentMethod === "COD" ? "Place Order (COD)" : "Pay Now Securely"}
+          <ArrowForwardIcon fontSize="small" />
+        </>
+      )}
+    </button>
+
+    <p className="text-[11px] sm:text-xs text-gray-500 text-center mt-4 leading-relaxed">
+      By placing your order, you agree to our{" "}
+      <Link
+        to="/terms-and-conditions"
+        className="text-emerald-700 hover:underline font-medium"
+      >
+        Terms & Conditions
+      </Link>
+      .
+    </p>
+  </aside>
+</div>
         </div>
       </div>
     </div>
