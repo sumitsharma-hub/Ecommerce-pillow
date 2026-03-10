@@ -1,3 +1,5 @@
+// schema.prisma
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,10 +15,10 @@ enum Role {
 
 model User {
   id       Int     @id @default(autoincrement())
-  name     String?
-  email    String? @unique
+  name     String
+  email    String  @unique
   phone    String? @unique
-  password String?
+  password String
   role     Role    @default(USER)
 
   orders    Order[]
@@ -27,11 +29,10 @@ model User {
 }
 
 model Product {
-  id          Int    @id @default(autoincrement())
-  productCode String @unique
-
+  id          Int      @id @default(autoincrement())
+  productCode String   @unique
   name        String
-  description String?  @db.Text // <-- add @db.Text here
+  description String?  @db.Text
   ingredients String?  @db.Text
   price       Float
   mrp         Float?
@@ -39,8 +40,7 @@ model Product {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
 
-  images ProductImage[]
-
+  images     ProductImage[]
   cartItems  CartItem[]
   orderItems OrderItem[]
   reviews    Review[]
@@ -79,6 +79,7 @@ model Order {
   user   User? @relation(fields: [userId], references: [id])
 
   name        String
+  email       String?
   phone       String
   address     String
   totalAmount Float
@@ -156,27 +157,15 @@ model Review {
   @@unique([productId, userId])
 }
 
+// Used only for forgot-password email OTP flow
 model PasswordReset {
-  id         Int      @id @default(autoincrement())
-  identifier String
-  channel    String // "email" or "sms"
-  otp        String
-  attempts   Int      @default(0)
-  expiresAt  DateTime
-  used       Boolean  @default(false)
-  createdAt  DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  email     String
+  otp       String
+  attempts  Int      @default(0)
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
 
-  @@index([identifier])
-}
-
-model LoginOtp {
-  id         Int      @id @default(autoincrement())
-  identifier String
-  otp        String
-  attempts   Int      @default(0)
-  expiresAt  DateTime
-  used       Boolean  @default(false)
-  createdAt  DateTime @default(now())
-
-  @@index([identifier])
+  @@index([email])
 }

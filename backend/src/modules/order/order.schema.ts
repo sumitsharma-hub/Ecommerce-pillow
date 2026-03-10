@@ -2,7 +2,8 @@ import { z } from "zod";
 
 export const placeOrderSchema = z.object({
   name: z.string().min(2),
-  phone: z.string().min(10),
+  email: z.string().email(),
+  phone: z.string(),
   address: z.string().min(5),
   paymentMethod: z.enum(["COD", "UPI"]),
   items: z.array(
@@ -10,7 +11,7 @@ export const placeOrderSchema = z.object({
       productId: z.number(),
       quantity: z.number().min(1),
     })
-  ).min(1),
+  ),
 });
 
 export const razorpayCreateSchema = z.object({

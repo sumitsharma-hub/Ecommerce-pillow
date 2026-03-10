@@ -11,6 +11,7 @@ import {
   razorpayCreateSchema,
   razorpayVerifySchema,
 } from "./order.schema";
+
 /**
  * PLACE ORDER (COD or UPI)
  */
@@ -24,39 +25,34 @@ export async function placeOrder(req: AuthRequest, res: Response) {
     });
   }
 
-  const { name, phone, address, paymentMethod, items } = parsed.data;
+  const { name, email, phone, address, paymentMethod, items } = parsed.data;
 
   const order = await OrderService.createOrder({
     userId: req.user?.id,
     name,
+    email,
     phone,
     address,
     paymentMethod,
     items,
   });
 
-  // COD → order is complete immediately
-  // if (paymentMethod === "COD") {
-  //   if (order.userId) {
-  //     const user = await prisma.user.findUnique({
-  //       where: { id: order.userId },
-  //     });
+  // COD → send confirmation email immediately
+  if (paymentMethod === "COD") {
+    if (order.email) {
+      await sendOrderConfirmationEmail(
+        order.email,
+        order.orderNumber,
+        order.totalAmount,
+        order.name,
+      );
+    }
 
-  //     if (user?.email) {
-  //       await sendOrderConfirmationEmail(
-  //         user.email,
-  //         order.orderNumber,
-  //         order.totalAmount,
-  //         user.name
-  //       );
-  //     }
-  //   }
-
-  //   return res.json({
-  //     message: "Order placed successfully (Cash on Delivery)",
-  //     orderId: order.id,
-  //   });
-  // }
+    return res.json({
+      message: "Order placed successfully (Cash on Delivery)",
+      orderId: order.id,
+    });
+  }
 
   // UPI → frontend will call createRazorpayOrder next
   return res.json({
@@ -132,7 +128,6 @@ export async function verifyPayment(req: Request, res: Response) {
 
   const order = await prisma.order.findUnique({
     where: { razorpayOrderId: razorpay_order_id },
-    include: { user: true },
   });
 
   if (!order) {
@@ -147,12 +142,12 @@ export async function verifyPayment(req: Request, res: Response) {
     },
   });
 
-  if (order.user?.email) {
+  if (order.email) {
     await sendOrderConfirmationEmail(
-      order.user.email,
+      order.email,
       order.orderNumber,
       order.totalAmount,
-      order.user.name || "Natural Plus Ayurveda",
+      order.name,
     );
   }
 
@@ -169,7 +164,6 @@ export async function downloadShippingSlip(req: Request, res: Response) {
     return res.status(400).json({ message: "Invalid order id" });
   }
 
-  // Fetch order with items
   const order = await prisma.order.findUnique({
     where: { id: orderId },
     include: {
@@ -196,7 +190,6 @@ export async function downloadShippingSlip(req: Request, res: Response) {
           .join(", ")
       : "—";
 
-  // Use paymentMethod as paymentMode
   const paymentMode = order.paymentMethod || "N/A";
 
   const doc = generateShippingSlip({

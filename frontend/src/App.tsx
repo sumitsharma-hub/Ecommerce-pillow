@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
-import { Sample } from "./pages/Sample";
+import Register from "./pages/Register";
 import AdminLayout from "./pages/Admin/AdminLayout";
 import Dashboard from "./pages/Admin/Dashboard";
 import Orders from "./pages/Admin/Orders";
@@ -18,8 +18,6 @@ import AboutUs from "./pages/AboutUs";
 import ForgotPassword from "./pages/ForgotPassword";
 import VerifyResetOtp from "./pages/VerifyResetOtp";
 import ResetPassword from "./pages/ResetPassword";
-import VerifyOtp from "./pages/VerifyOtp";
-import CompleteProfile from "./pages/CompleteProfile";
 import Profile from "./pages/Profile";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -39,14 +37,12 @@ function AppContent() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/products/:productCode" element={<ProductDetails />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/sample" element={<Sample />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/order-success" element={<OrderSuccess />} />
         <Route path="/my-orders" element={<MyOrders />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-reset-otp" element={<VerifyResetOtp />} />
-        <Route path="/verify-otp" element={<VerifyOtp />} />
-        <Route path="/complete-profile" element={<CompleteProfile />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />

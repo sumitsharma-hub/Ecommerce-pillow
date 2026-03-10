@@ -7,10 +7,8 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 export default function ResetPassword() {
   const { state } = useLocation();
-  const identifier = state?.identifier;
-  const otp = state?.otp;
-  const sessionId = state?.sessionId || null;
-  const isSettingNewPassword = state?.isSettingNewPassword || false;
+  const email: string = state?.email || "";
+  const otp: string = state?.otp || "";
 
   const navigate = useNavigate();
 
@@ -40,44 +38,31 @@ export default function ResetPassword() {
     setIsLoading(true);
 
     try {
-      await resetPassword({
-        identifier,
-        otp,
-        password,
-        ...(sessionId && { sessionId }),
-      }).unwrap();
-
-      navigate("/login");
+      await resetPassword({ email, otp, password }).unwrap();
+      navigate("/login", { replace: true });
     } catch (err: any) {
-      setError(err?.data?.message || "Failed to reset password");
+      setError(err?.data?.message || "Failed to reset password. Please try again.");
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-green-50 via-white to-emerald-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-linear-to-br from-green-50 via-white to-emerald-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-2xl p-4 mx-auto mb-4 shadow-lg">
             <LockIcon className="text-green-700" style={{ fontSize: 40 }} />
           </div>
-
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {isSettingNewPassword ? "Set New Password" : "Reset Password"}
-          </h1>
-
-          <p className="text-gray-600">
-            {isSettingNewPassword
-              ? "Create a password for your account"
-              : "Enter your new password"}
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Reset Password</h1>
+          <p className="text-gray-600">Enter your new password below</p>
         </div>
 
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-sm border border-green-100 p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* New Password */}
             <div>
               <label className="text-sm font-semibold text-gray-700 mb-2 block">
                 New Password
@@ -85,7 +70,7 @@ export default function ResetPassword() {
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter new password"
+                  placeholder="Min. 6 characters"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -93,10 +78,9 @@ export default function ResetPassword() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  onClick={() => setShowPassword((p) => !p)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   tabIndex={-1}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
                     <VisibilityOffIcon fontSize="small" />
@@ -107,6 +91,7 @@ export default function ResetPassword() {
               </div>
             </div>
 
+            {/* Confirm Password */}
             <div>
               <label className="text-sm font-semibold text-gray-700 mb-2 block">
                 Confirm Password
@@ -114,7 +99,7 @@ export default function ResetPassword() {
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Confirm new password"
+                  placeholder="Re-enter new password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
@@ -122,12 +107,9 @@ export default function ResetPassword() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowConfirmPassword((prev) => !prev)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  onClick={() => setShowConfirmPassword((p) => !p)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   tabIndex={-1}
-                  aria-label={
-                    showConfirmPassword ? "Hide password" : "Show password"
-                  }
                 >
                   {showConfirmPassword ? (
                     <VisibilityOffIcon fontSize="small" />
@@ -145,14 +127,18 @@ export default function ResetPassword() {
             )}
 
             <button
+              type="submit"
               disabled={isLoading}
-              className="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50"
+              className="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all disabled:bg-green-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-lg"
             >
-              {isLoading
-                ? "Updating..."
-                : isSettingNewPassword
-                  ? "Set Password"
-                  : "Reset Password"}
+              {isLoading ? (
+                <>
+                  <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Resetting...
+                </>
+              ) : (
+                "Reset Password"
+              )}
             </button>
           </form>
         </div>
