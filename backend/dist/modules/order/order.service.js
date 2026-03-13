@@ -4,18 +4,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createOrder = createOrder;
-// Order Service
 const prisma_1 = __importDefault(require("../../prisma"));
 const idGenerator_util_1 = require("../../utils/idGenerator.util");
 async function createOrder(data) {
     const products = await prisma_1.default.product.findMany({
         where: {
-            id: { in: data.items.map(i => i.productId) },
+            id: { in: data.items.map((i) => i.productId) },
         },
     });
     let totalAmount = 0;
-    const orderItems = data.items.map(item => {
-        const product = products.find(p => p.id === item.productId);
+    const orderItems = data.items.map((item) => {
+        const product = products.find((p) => p.id === item.productId);
         totalAmount += product.price * item.quantity;
         return {
             productId: product.id,
@@ -28,6 +27,7 @@ async function createOrder(data) {
             orderNumber: (0, idGenerator_util_1.generateOrderNumber)(),
             userId: data.userId,
             name: data.name,
+            email: data.email,
             phone: data.phone,
             address: data.address,
             paymentMethod: data.paymentMethod,

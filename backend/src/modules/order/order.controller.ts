@@ -241,3 +241,45 @@ export async function getMyOrders(req: AuthRequest, res: Response) {
 
   res.json(orders);
 }
+
+/**
+ * TRACK ORDER BY EMAIL + ORDER NUMBER (Guest)
+ */
+export async function trackOrderByEmailAndNumber(req: Request, res: Response) {
+  const email = (req.query.email as string)?.trim().toLowerCase();
+  const orderNumber = (req.query.orderNumber as string)?.trim();
+
+  if (!email || !orderNumber) {
+    return res
+      .status(400)
+      .json({ message: "Email and order number are required." });
+  }
+
+  const order = await prisma.order.findFirst({
+    where: {
+      email: email, // simple equality — no mode needed
+      orderNumber,
+    },
+    include: {
+      tracking: true,
+      items: {
+        include: {
+          product: {
+            select: {
+              name: true,
+              images: { take: 1 },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!order) {
+    return res
+      .status(404)
+      .json({ message: "No order found with this email and order number." });
+  }
+
+  res.json(order);
+}

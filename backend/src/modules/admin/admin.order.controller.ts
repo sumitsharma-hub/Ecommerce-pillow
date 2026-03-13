@@ -68,6 +68,7 @@ export async function updateTracking(req: Request, res: Response) {
       courierName,
       trackingNumber,
       status,
+      email
     });
   }
 
@@ -115,6 +116,7 @@ export async function updateOrderTracking(req: Request, res: Response) {
       courierName,
       trackingNumber,
       status,
+      email
     });
   }
 

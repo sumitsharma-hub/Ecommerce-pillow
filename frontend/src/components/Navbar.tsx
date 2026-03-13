@@ -10,6 +10,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 
 export default function Navbar() {
   const { user } = useAppSelector((state) => state.auth);
@@ -50,11 +51,24 @@ export default function Navbar() {
           </Link>
 
           {/* Right Section */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
+
+            {/* Track Order — shown for guests only, hidden when logged in
+                (logged-in users use My Orders in the profile dropdown)    */}
+            {!user && (
+              <Link
+                to="/track-order"
+                title="Track your order"
+                className="relative p-2 rounded-xl text-gray-600 hover:text-green-700 hover:bg-green-50 transition-colors"
+              >
+                <LocalShippingOutlinedIcon />
+              </Link>
+            )}
+
             {/* Cart */}
             <Link
               to="/cart"
-              className="relative p-2 rounded-xl text-gray-600 hover:text-green-700 hover:bg-green-50"
+              className="relative p-2 rounded-xl text-gray-600 hover:text-green-700 hover:bg-green-50 transition-colors"
             >
               <ShoppingCartOutlinedIcon />
               {cartItemCount > 0 && (
@@ -122,7 +136,6 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-              // ++ Added Sign Up button alongside Sign In
               <div className="hidden sm:flex items-center gap-2">
                 <Link
                   to="/login"
@@ -139,7 +152,7 @@ export default function Navbar() {
               </div>
             )}
 
-            {/* ================= MOBILE ================= */}
+            {/* ================= MOBILE HAMBURGER ================= */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="sm:hidden p-2 rounded-xl hover:bg-green-50"
@@ -154,8 +167,16 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="sm:hidden bg-white border-t border-green-100 px-4 py-4 space-y-3">
           {!user ? (
-            // ++ Added Sign Up button in mobile menu
             <>
+              {/* Track order in mobile menu for guests */}
+              <Link
+                to="/track-order"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center justify-center gap-2 py-2 border border-gray-200 rounded-xl text-gray-700 hover:bg-gray-50 text-sm"
+              >
+                <LocalShippingOutlinedIcon fontSize="small" />
+                Track My Order
+              </Link>
               <Link
                 to="/login"
                 onClick={() => setIsMenuOpen(false)}

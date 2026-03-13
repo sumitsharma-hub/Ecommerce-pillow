@@ -11,6 +11,7 @@ interface Product {
   name: string;
   description?: string;
   price: number;
+  mrp?: number; // ✅ added
   images?: { url: string }[];
 }
 
@@ -39,52 +40,76 @@ export default function ProductCard({ product }: { product: Product }) {
     navigate(`/products/${product.productCode}`);
   };
 
+  // ✅ same logic as ProductDetails
+  const mrp = product.mrp ?? null;
+  const hasDiscount = !!mrp && mrp > product.price;
+  const discount = hasDiscount
+    ? Math.round(((mrp - product.price) / mrp) * 100)
+    : 0;
+
   return (
     <article
       onClick={goToDetails}
-      className="bg-white rounded-2xl border border-green-100 shadow-sm hover:shadow-lg hover:border-green-200 transition-all duration-300 p-4 flex flex-col cursor-pointer group"
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && goToDetails()}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          goToDetails();
+        }
+      }}
+      className="h-full bg-white rounded-2xl border border-emerald-100 shadow-sm hover:shadow-lg hover:border-emerald-200 transition-all duration-300 p-2.5 sm:p-3 lg:p-4 flex flex-col cursor-pointer group"
     >
       {/* Image */}
       <ImageCarousel images={product.images ?? []} variant="card" />
 
       {/* Content */}
-      <div className="mt-4 flex-1 flex flex-col">
-        {/* Title */}
-        <h3 className="font-semibold text-lg text-gray-800 group-hover:text-green-700 transition-colors line-clamp-2">
+      <div className="mt-3 sm:mt-4 flex-1 flex flex-col">
+        <h3 className="font-semibold text-sm sm:text-base lg:text-lg text-gray-800 group-hover:text-emerald-700 transition-colors line-clamp-2 leading-snug">
           {product.name}
         </h3>
 
-        {/* Description */}
         {product.description && (
-          <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+          <p className="text-xs sm:text-sm text-gray-500 mt-1.5 line-clamp-2">
             {product.description}
           </p>
         )}
 
-        <div className="mt-auto pt-4">
-          {/* Price */}
-          <p className="text-xl font-bold text-green-700">
-            ₹{product.price.toLocaleString()}
-          </p>
+        <div className="mt-auto pt-3 sm:pt-4">
+          {/* ✅ Price block */}
+          <div className="flex items-baseline gap-2 flex-wrap">
+            <p className="text-base sm:text-lg lg:text-xl font-bold text-emerald-700">
+              ₹{product.price.toLocaleString("en-IN")}
+            </p>
+
+            {hasDiscount && (
+              <>
+                <p className="text-xs sm:text-sm text-gray-400 line-through">
+                  ₹{mrp.toLocaleString("en-IN")}
+                </p>
+                <span className="text-[10px] sm:text-xs font-semibold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full">
+                  {discount}% OFF
+                </span>
+              </>
+            )}
+          </div>
 
           {/* Actions */}
-          <div className="mt-3 flex gap-2">
+          <div className="mt-2.5 sm:mt-3 grid grid-cols-1 gap-2">
             <button
+              type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 handleAddToCart();
               }}
-              className="flex-1 bg-gray-900 text-white py-2.5 rounded-xl"
+              className="w-full bg-gray-900 text-white py-2 sm:py-2.5 rounded-xl hover:bg-black transition-colors text-xs sm:text-sm font-medium flex items-center justify-center gap-1.5"
             >
               <ShoppingCartOutlinedIcon fontSize="small" />
               {isInCart ? "Go to Cart" : "Add to Cart"}
             </button>
 
             <button
-              className="flex-1 bg-green-600 text-white py-2.5 rounded-xl hover:bg-green-700 transition-colors flex items-center justify-center gap-2 text-sm font-medium cursor-pointer"
+              type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 navigate("/checkout", {
@@ -100,6 +125,7 @@ export default function ProductCard({ product }: { product: Product }) {
                   },
                 });
               }}
+              className="w-full bg-emerald-600 text-white py-2 sm:py-2.5 rounded-xl hover:bg-emerald-700 transition-colors text-xs sm:text-sm font-medium flex items-center justify-center gap-1.5"
             >
               <ShoppingBagOutlinedIcon fontSize="small" />
               Buy Now
