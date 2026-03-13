@@ -4,13 +4,14 @@ exports.razorpayVerifySchema = exports.razorpayCreateSchema = exports.placeOrder
 const zod_1 = require("zod");
 exports.placeOrderSchema = zod_1.z.object({
     name: zod_1.z.string().min(2),
-    phone: zod_1.z.string().min(10),
+    email: zod_1.z.string().email(),
+    phone: zod_1.z.string(),
     address: zod_1.z.string().min(5),
     paymentMethod: zod_1.z.enum(["COD", "UPI"]),
     items: zod_1.z.array(zod_1.z.object({
         productId: zod_1.z.number(),
         quantity: zod_1.z.number().min(1),
-    })).min(1),
+    })),
 });
 exports.razorpayCreateSchema = zod_1.z.object({
     orderId: zod_1.z.number(),

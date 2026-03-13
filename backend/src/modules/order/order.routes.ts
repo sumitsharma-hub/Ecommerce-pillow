@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getMyOrders, placeOrder } from "./order.controller";
+import { getMyOrders, placeOrder, trackOrderByEmailAndNumber } from "./order.controller";
 import { authMiddlewareOptional } from "../../middlewares/authOptional.middleware";
 import {
   createRazorpayOrder,
@@ -17,6 +17,7 @@ router.post("/payments/create-order", createRazorpayOrder);
 router.post("/payments/verify", verifyPayment);
 router.get("/:id/shipping-slip", authMiddleware, downloadShippingSlip);
 router.get("/my", authMiddleware, getMyOrders);
+router.get("/track", trackOrderByEmailAndNumber);
 
 
 export default router;

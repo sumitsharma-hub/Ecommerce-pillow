@@ -57,6 +57,7 @@ export async function sendTrackingUpdateEmail(
     courierName: string;
     trackingNumber: string;
     status: string;
+    email: string;
   }
 ) {
   if (!to) return;

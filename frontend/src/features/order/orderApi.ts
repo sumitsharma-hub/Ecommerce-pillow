@@ -44,6 +44,12 @@ export const orderApi = createApi({
     getMyOrders: builder.query<any[], void>({
       query: () => "/orders/my",
     }),
+    trackGuestOrder: builder.query<any, { email: string; orderNumber: string }>(
+      {
+        query: ({ email, orderNumber }) =>
+          `/orders/track?email=${encodeURIComponent(email)}&orderNumber=${encodeURIComponent(orderNumber)}`,
+      },
+    ),
   }),
 });
 
@@ -52,4 +58,5 @@ export const {
   useCreateRazorpayOrderMutation,
   useVerifyPaymentMutation,
   useGetMyOrdersQuery,
+  useLazyTrackGuestOrderQuery
 } = orderApi;

@@ -23,6 +23,7 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ShippingPolicy from "./pages/ShippingPolicy";
 import ReturnRefundPolicy from "./pages/ReturnRefundPolicy";
+import TrackMyOrder from "./pages/TrackMyOrder";
 
 function AppContent() {
   const location = useLocation();
@@ -49,6 +50,7 @@ function AppContent() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/shipping-policy" element={<ShippingPolicy />} />
         <Route path="/return-refund-policy" element={<ReturnRefundPolicy />} />
+        <Route path="/track-order" element={<TrackMyOrder />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="orders" element={<Orders />} />

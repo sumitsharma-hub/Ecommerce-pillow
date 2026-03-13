@@ -8,6 +8,7 @@ exports.updateTracking = updateTracking;
 exports.updateOrderStatus = updateOrderStatus;
 exports.updateOrderTracking = updateOrderTracking;
 const prisma_1 = __importDefault(require("../../prisma"));
+const email_util_1 = require("../../utils/email.util");
 async function getAllOrders(req, res) {
     const orders = await prisma_1.default.order.findMany({
         include: {
@@ -46,6 +47,26 @@ async function updateTracking(req, res) {
         update: { courierName, trackingNumber, status },
         create: { orderId: id, courierName, trackingNumber, status },
     });
+    // Fetch order to send email
+    const order = await prisma_1.default.order.findUnique({
+        where: { id },
+        include: {
+            user: {
+                select: { name: true, email: true },
+            },
+        },
+    });
+    const email = order?.email || order?.user?.email;
+    const name = order?.name || order?.user?.name || "Valued Customer";
+    if (email) {
+        await (0, email_util_1.sendTrackingUpdateEmail)(email, {
+            orderNumber: order?.orderNumber,
+            name,
+            courierName,
+            trackingNumber,
+            status,
+        });
+    }
     res.json({ message: "Tracking updated", tracking });
 }
 async function updateOrderStatus(req, res) {
@@ -65,5 +86,24 @@ async function updateOrderTracking(req, res) {
         update: { courierName, trackingNumber, status },
         create: { orderId, courierName, trackingNumber, status },
     });
+    const order = await prisma_1.default.order.findUnique({
+        where: { id: orderId },
+        include: {
+            user: {
+                select: { name: true, email: true },
+            },
+        },
+    });
+    const email = order?.email || order?.user?.email;
+    const name = order?.name || order?.user?.name || "Valued Customer";
+    if (email) {
+        await (0, email_util_1.sendTrackingUpdateEmail)(email, {
+            orderNumber: order?.orderNumber,
+            name,
+            courierName,
+            trackingNumber,
+            status,
+        });
+    }
     res.json(tracking);
 }

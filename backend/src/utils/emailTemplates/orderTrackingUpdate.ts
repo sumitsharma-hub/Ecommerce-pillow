@@ -4,21 +4,27 @@ export function orderTrackingUpdateTemplate(params: {
   courierName: string;
   trackingNumber: string;
   status: string;
+  email: string;
 }) {
-  const statusConfig: Record<string, { emoji: string; label: string; color: string; bg: string; message: string }> = {
+  const statusConfig: Record<
+    string,
+    { emoji: string; label: string; color: string; bg: string; message: string }
+  > = {
     OUT_FOR_DELIVERY: {
       emoji: "🚚",
       label: "Out for Delivery",
       color: "#1d4ed8",
       bg: "#dbeafe",
-      message: "Your order is on its way! Our delivery partner will deliver it to you today.",
+      message:
+        "Your order is on its way! Our delivery partner will deliver it to you today.",
     },
     DELIVERED: {
       emoji: "✅",
       label: "Delivered",
       color: "#15803d",
       bg: "#dcfce7",
-      message: "Your order has been delivered successfully. We hope you love your products!",
+      message:
+        "Your order has been delivered successfully. We hope you love your products!",
     },
   };
 
@@ -128,9 +134,8 @@ export function orderTrackingUpdateTemplate(params: {
           <!-- CTA Button -->
           <tr>
             <td style="padding:28px 32px 0;text-align:center;">
-              <a href="https://naturalplusayurveda.com/my-orders"
-                 style="display:inline-block;padding:14px 36px;background-color:#15803d;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;border-radius:10px;">
-                View My Orders
+              <a href="https://naturalplusayurveda.com/track-order?email=${encodeURIComponent(params.email)}&orderNumber=${encodeURIComponent(params.orderNumber)}" ...>
+                View My Order
               </a>
             </td>
           </tr>
